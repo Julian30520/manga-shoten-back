@@ -6,10 +6,12 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "_user")
+@Table(name = "user")
 @DynamicUpdate
 @Getter @Setter @NoArgsConstructor
 public class User {
@@ -47,4 +49,27 @@ public class User {
             })
     @JoinColumn(name = "id_role")
     private Role role;
+
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST
+            })
+    @JoinTable(
+            name = "user_tome",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_tome")
+    )
+    private List<Tome> tomes = new ArrayList<>();
+
+    public void addTome(Tome tome) {
+        tomes.add(tome);
+        //tome.setTome(this);
+    }
+
+    public void removeTome(Tome tome) {
+        tomes.remove(tome);
+        //tome.setTome(null);
+    }
 }
