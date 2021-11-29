@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "user")
+@Table(name = "_user")
 @DynamicUpdate
 @Getter @Setter @NoArgsConstructor
 public class User {
@@ -45,6 +45,6 @@ public class User {
                     CascadeType.MERGE,
                     CascadeType.PERSIST
             })
-    @JoinTable(name = "role")
+    @JoinColumn(name = "id_role")
     private Role role;
 }
