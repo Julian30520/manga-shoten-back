@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @SpringBootApplication
 public class DataLayerApplication implements CommandLineRunner {
@@ -28,8 +30,15 @@ public class DataLayerApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 
-		Iterable<User> users = userService.getUsers();
-		users.forEach(user -> System.out.println(user.getFirstName()));
+		/*Optional<User> user = userService.getUserByUsername("dtebbut8");
+		if(user.isPresent()) {
+			System.out.println(user.get().getUsername());
+			System.out.println(user.get().getRole().getCodeRole());
+		}
+		else System.out.println("Unknow username");*/
+
+		/*Iterable<User> users = userService.getUsers();
+		users.forEach(user -> System.out.println(user.getFirstName()));*/
 
 		/*Iterable<Role> roles = roleService.getRoles();
 		roles.forEach((role -> System.out.println(role.getCodeRole())));*/
