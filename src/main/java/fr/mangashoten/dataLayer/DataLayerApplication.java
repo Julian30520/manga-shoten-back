@@ -51,21 +51,11 @@ public class DataLayerApplication implements CommandLineRunner {
 		newUser.setPassword("password");
 		Date date = new SimpleDateFormat("dd/MM/yyyy").parse("23/03/1995");
 		newUser.setDateOfBirth(date);
-		Optional<Role> role = roleService.getRoleById(3);
-		Role roleRes = role.get();
-		newUser.setRole(roleRes);
+		newUser.setRole(roleService.getRoleById(3).get());
 		newUser = userService.addUser(newUser);*/
 
 		//Add or delete tome from user
-		/*Optional<User> user = userService.getUserByUsername("cknatt3");
-		User userRes = user.get();
-		System.out.println((userRes.getUsername()));
-		System.out.println((userRes.getUserId()));
-		Optional<Tome> tome = tomeService.getTomeById(8);
-		Tome tomeRes = tome.get();
-		//userRes.addTome(tomeRes);
-		//userRes.removeTome(tomeRes);*/
-		// - in 1 line - userService.getUserByUsername("Genevas").get().addTome(tomeService.getTomeById(8).get());
+		//userService.getUserByUsername("Genevas").get().addTome(tomeService.getTomeById(8).get());
 
 		//Content of user_tome table here (find all tomes of all users)
 		/*Iterable<User> users = userService.getUsers();
@@ -80,11 +70,10 @@ public class DataLayerApplication implements CommandLineRunner {
 		//Find all tome from a username
 		/*Optional<User> user = userService.getUserByUsername("cknatt3");
 		User userRes = user.get();
-		System.out.println((userRes.getUsername()));
-		System.out.println((userRes.getUserId()));
 		Iterable<Tome> tomes = userRes.getTomes();
 		tomes.forEach(tome -> System.out.println((tome.getTomeId())));*/
 
+		//Find user by username
 		/*Optional<User> user = userService.getUserByUsername("dtebbut8");
 		if(user.isPresent()) {
 			System.out.println(user.get().getUsername());
@@ -92,9 +81,11 @@ public class DataLayerApplication implements CommandLineRunner {
 		}
 		else System.out.println("Unknow username");*/
 
+		//Find all users
 		/*Iterable<User> users = userService.getUsers();
 		users.forEach(user -> System.out.println(user.getFirstName()));*/
 
+		//Find all roles
 		/*Iterable<Role> roles = roleService.getRoles();
 		roles.forEach((role -> System.out.println(role.getCodeRole())));*/
 	}
