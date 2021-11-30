@@ -65,11 +65,9 @@ public class User {
 
     public void addTome(Tome tome) {
         tomes.add(tome);
-        //tome.setTome(this);
     }
 
     public void removeTome(Tome tome) {
         tomes.remove(tome);
-        //tome.setTome(null);
     }
 }

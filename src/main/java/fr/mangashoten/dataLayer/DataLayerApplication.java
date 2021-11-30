@@ -12,7 +12,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -36,6 +38,24 @@ public class DataLayerApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 
+		//Delete user
+		//userService.deleteUser(userService.getUserByUsername("Genevas").get());
+
+		//Add new user
+		/*User newUser = new User();
+		newUser.setUsername("Genevas");
+		newUser.setMail("juliantomczyk@gmail.com");
+		newUser.setAvatar("urlAvatar");
+		newUser.setFirstName("Julian");
+		newUser.setLastName("Tomczyk");
+		newUser.setPassword("password");
+		Date date = new SimpleDateFormat("dd/MM/yyyy").parse("23/03/1995");
+		newUser.setDateOfBirth(date);
+		Optional<Role> role = roleService.getRoleById(3);
+		Role roleRes = role.get();
+		newUser.setRole(roleRes);
+		newUser = userService.addUser(newUser);*/
+
 		//Add or delete tome from user
 		/*Optional<User> user = userService.getUserByUsername("cknatt3");
 		User userRes = user.get();
@@ -45,6 +65,7 @@ public class DataLayerApplication implements CommandLineRunner {
 		Tome tomeRes = tome.get();
 		//userRes.addTome(tomeRes);
 		//userRes.removeTome(tomeRes);*/
+		// - in 1 line - userService.getUserByUsername("Genevas").get().addTome(tomeService.getTomeById(8).get());
 
 		//Content of user_tome table here (find all tomes of all users)
 		/*Iterable<User> users = userService.getUsers();
