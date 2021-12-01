@@ -33,4 +33,12 @@ public class Tome {
             mappedBy = "tomes",
             cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
+
+    @ManyToOne(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinColumn(name = "id_editor")
+    private Editor editor;
 }
