@@ -38,12 +38,12 @@ public class DataLayerApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 
-		Tome newTome = new Tome();
+		/*Tome newTome = new Tome();
 		newTome.setPageNumber(24);
 		newTome.setTomeNumber(56);
 		newTome.setCover("urlll");
 
-		newTome = tomeService.addTome(newTome);
+		newTome = tomeService.addTome(newTome);*/
 
 		//Delete user
 		//userService.deleteUser(userService.getUserByUsername("Genevas").get());
