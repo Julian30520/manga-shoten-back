@@ -4,6 +4,7 @@ import fr.mangashoten.dataLayer.DataLayerApplication;
 import fr.mangashoten.dataLayer.model.Editor;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.repository.TomeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ class TomeServiceTest {
     private TomeService tomeService;
 
     @Test
-    void getTomesTest() {
+    void get_tomesTest() {
         // GIVEN
         List<Tome> initTomes = new ArrayList<>();
 
@@ -57,7 +58,7 @@ class TomeServiceTest {
     }
 
     @Test
-    void getTomeByIdTest() {
+    void get_tomeByIdTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
@@ -77,7 +78,7 @@ class TomeServiceTest {
     }
 
     @Test
-    void addTomeTest() {
+    void add_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
@@ -95,7 +96,7 @@ class TomeServiceTest {
     }
 
     @Test
-    void deleteTomeTest() {
+    void delete_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
