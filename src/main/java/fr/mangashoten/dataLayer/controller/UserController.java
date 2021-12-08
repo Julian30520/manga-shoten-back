@@ -16,8 +16,7 @@ public class UserController {
 
     // get all users
     @GetMapping("/users")
-    public Iterable<User> getUsers() {
-        return userService.getUsers();
+    public Iterable<User> getUsers() {return userService.getUsers();
     }
 
     // create a user

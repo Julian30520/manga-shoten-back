@@ -29,6 +29,24 @@ public class UserService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
+//    public Iterable<User> getUsers() {
+//          return userRepository.findAll();
+//      }
+
+    public Optional<User> getUserById(final Integer id) {
+          return userRepository.findById(id);
+      }
+
+    public User saveUser(User user) {
+          User savedUser = userRepository.save(user);
+          return savedUser;
+      }
+
+    public void deteleUser(final Integer id) {
+          userRepository.deleteById(id);
+      }
+
 }
 
 /**

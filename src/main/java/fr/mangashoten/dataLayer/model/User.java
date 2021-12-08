@@ -42,38 +42,13 @@ public class User {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    public User(String username, String mail, String avatar, String firstName, String lastName, String password, Date dateOfBirth) {
-        this.username = username;
-        this.mail = mail;
-        this.avatar = avatar;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public User() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getMail() {
-        return mail;
-    }
+    @ManyToOne(
+            cascade = {
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST
+            })
+    @JoinColumn(name = "id_role")
+    private Role role;
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -87,6 +62,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "id_tome")
     )
     private List<Tome> tomes = new ArrayList<>();
+
 
     public void addTome(Tome tome) {
         tomes.add(tome);
