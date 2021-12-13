@@ -6,6 +6,8 @@ import fr.mangashoten.dataLayer.repository.TomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -14,12 +16,20 @@ public class TomeService {
     @Autowired
     private TomeRepository tomeRepository;
 
-    public Iterable<Tome> getTomes() {
-        return tomeRepository.findAll();
+    public ArrayList<Tome> getTomes() {
+        Iterable<Tome> iteTomes = tomeRepository.findAll();
+        ArrayList<Tome> arrayTomes = new ArrayList<>();
+        iteTomes.iterator().forEachRemaining(arrayTomes::add);
+        return arrayTomes;
     }
 
-    public Optional<Tome> getTomeById(int tomeId) {
-        return tomeRepository.findById(tomeId);
+    public Tome getTomeById(int tomeId) {
+        var optTome = tomeRepository.findById(tomeId);
+        try{
+            return optTome.get();
+        }catch(NoSuchElementException ex){
+            return null;
+        }
     }
 
     public Tome addTome(Tome tome) {

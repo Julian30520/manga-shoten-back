@@ -71,10 +71,10 @@ class TomeServiceTest {
         Tome genericTome = tomeRepository.save(tomeToSend);
 
         // WHEN
-        Optional<Tome> foundTome = tomeService.getTomeById(genericTome.getTomeId());
+        Tome foundTome = tomeService.getTomeById(genericTome.getTomeId());
 
         // THEN
-        assertEquals(genericTome.getTomeId(), foundTome.get().getTomeId());
+        assertEquals(genericTome.getTomeId(), foundTome.getTomeId());
     }
 
     @Test
