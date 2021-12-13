@@ -2,6 +2,7 @@ package fr.mangashoten.dataLayer.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
@@ -38,7 +39,6 @@ public class UserService {
         var user = userRepository.findByUsername(username);
         if(user.isPresent()) return user.get();
         else return null;
-        //TODO: return un HTTP response 404 quand l'utilisateur n'est pas trouvé
     }
 
     /**
@@ -70,11 +70,16 @@ public class UserService {
     }
 
     /**
-     * Récupèe la liste des tomes possédés par un utilisateur
+     * Récupère la liste des tomes possédés par un utilisateur
      * @param user l'utilisateur dont on veut la liste des tomes
      * @return Une liste de tomes
      */
     public ArrayList<Tome> getTomes(User user){
         return new ArrayList<Tome>(user.getTomes());
     }
+
+    public void addTomeToLibrary(User user, Tome tome){
+
+    }
+
 }
