@@ -45,4 +45,13 @@ public class Tome {
     @JoinColumn(name = "id_editor")
     @JsonManagedReference
     private Editor editor;
+
+    @ManyToOne(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinColumn(name = "id_manga")
+    private Manga manga;
 }
