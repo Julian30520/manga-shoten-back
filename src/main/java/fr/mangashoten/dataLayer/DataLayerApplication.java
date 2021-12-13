@@ -1,8 +1,10 @@
 package fr.mangashoten.dataLayer;
 
+import fr.mangashoten.dataLayer.model.Author;
 import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
+import fr.mangashoten.dataLayer.service.AuthorService;
 import fr.mangashoten.dataLayer.service.RoleService;
 import fr.mangashoten.dataLayer.service.TomeService;
 import fr.mangashoten.dataLayer.service.UserService;
@@ -29,6 +31,9 @@ public class DataLayerApplication implements CommandLineRunner {
 
 	@Autowired
 	private TomeService tomeService;
+
+	@Autowired
+	private AuthorService authorService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataLayerApplication.class, args);
@@ -95,5 +100,26 @@ public class DataLayerApplication implements CommandLineRunner {
 		//Find all roles
 		/*Iterable<Role> roles = roleService.getRoles();
 		roles.forEach((role -> System.out.println(role.getCodeRole())));*/
+
+		 //Find All Author
+//		Iterable<Author> authors = authorService.getAllAuthor();
+//		authors.forEach((author -> System.out.println(author.getFirstName()+ " "+ author.getLastName())));
+
+		//Find Author By Id
+//		Optional<Author> author = authorService.getAuthorById(10);
+//		System.out.println(author.get().getFirstName()+author.get().getLastName());
+
+		//Add Author
+//		Author murata = new Author();
+//		murata.setFirstName("Yusuke ");
+//		murata.setLastName("MURATA");
+//		murata.setAuthorId(11);
+//
+//		authorService.addAuthor(murata);
+
+		//delete Author
+
+//		authorService.deleteAuthor(11);
+
 	}
 }
