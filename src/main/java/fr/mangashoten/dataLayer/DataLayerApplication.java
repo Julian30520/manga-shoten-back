@@ -1,10 +1,12 @@
 package fr.mangashoten.dataLayer;
 
 import fr.mangashoten.dataLayer.model.Author;
+import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.AuthorService;
+import fr.mangashoten.dataLayer.service.MangaService;
 import fr.mangashoten.dataLayer.service.RoleService;
 import fr.mangashoten.dataLayer.service.TomeService;
 import fr.mangashoten.dataLayer.service.UserService;
@@ -34,6 +36,9 @@ public class DataLayerApplication implements CommandLineRunner {
 
 	@Autowired
 	private AuthorService authorService;
+
+	@Autowired
+	private MangaService mangaService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataLayerApplication.class, args);
@@ -120,6 +125,31 @@ public class DataLayerApplication implements CommandLineRunner {
 		//delete Author
 
 //		authorService.deleteAuthor(11);
+
+
+		// Find All Manga
+//		Iterable<Manga> mangas = mangaService.getAllManga();
+//		mangas.forEach(manga -> System.out.println(manga.getTitleEn()));
+		// Find Manga by id
+//		Optional<Manga> manga = mangaService.getMangaById(31);
+//		System.out.println(manga.get().getTitleJp());
+		// Ajouter un Manga
+		Manga kaiju = new Manga();
+		kaiju.setTitleEn("Kaiju n°8");
+		kaiju.setTitleJp("Kai");
+		kaiju.setSynopsis("http://dummyimage.com/224x100.png/cc0000/ffffff");
+		kaiju.setReleaseDate("2021-08-13");
+		kaiju.setAuthorId(1);
+
+		// MangaService.addManga(kaiju);
+		// mangaService.deleteMangaById(41);
+
+		Optional<Manga> manga = mangaService.findByTitleEn("mo");
+		if(manga.isPresent()) {
+			System.out.println(manga.get().getTitleEn());
+		} else {
+			System.out.println("Object not found");
+		}
 
 	}
 }
