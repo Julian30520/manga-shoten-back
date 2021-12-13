@@ -26,10 +26,15 @@ public class UserController {
         return userService.getUserByUsername(name);
     }
 
-    @GetMapping(value="{user_id}/tomes")
+    @GetMapping(value="/{user_id}/tomes")
     public ArrayList<Tome> getUserTomes(@PathVariable Integer user_id){
         User user = userService.getUserById(user_id);
         return userService.getTomes(user);
+    }
+
+    @PatchMapping(value="/{user_id}/{tome_id}")
+    public void addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id){
+        userService.addTomeToLibrary(user_id, tome_id);
     }
 
 }

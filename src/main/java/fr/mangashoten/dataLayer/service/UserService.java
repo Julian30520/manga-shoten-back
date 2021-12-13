@@ -17,6 +17,8 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TomeService tomeService;
 
     /**
      * Va chercher la liste de utilisateurs
@@ -78,8 +80,10 @@ public class UserService {
         return new ArrayList<Tome>(user.getTomes());
     }
 
-    public void addTomeToLibrary(User user, Tome tome){
-
+    public void addTomeToLibrary(Integer user_id, Integer tome_id){
+        User user = this.getUserById(user_id);
+        //user.getTomes().add(tomeService.getTomeById(tome_id));
+        userRepository.save(user);
     }
 
 }
