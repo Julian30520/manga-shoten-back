@@ -1,5 +1,6 @@
 package fr.mangashoten.dataLayer.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,5 +32,6 @@ public class Editor {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonBackReference
     private List<Tome> tomes = new ArrayList<>();
 }

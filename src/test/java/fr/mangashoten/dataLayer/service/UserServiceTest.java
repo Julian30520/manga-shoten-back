@@ -79,10 +79,10 @@ class UserServiceTest {
         User genericUser = userRepository.save(userToSend);
 
         // WHEN
-        Optional<User> result = userService.getUserByUsername(genericUser.getUsername());
+        User result = userService.getUserByUsername(genericUser.getUsername());
 
         // THEN
-        assertEquals(genericUser.getUsername(), result.get().getUsername());
+        assertEquals(genericUser.getUsername(), result.getUsername());
     }
 
     @Test
@@ -102,10 +102,10 @@ class UserServiceTest {
         User genericUser = userRepository.save(userToSend);
 
         // WHEN
-        Optional<User> result = userService.getUserByUsername("AnotherUsername");
+        User result = userService.getUserByUsername("AnotherUsername");
 
         // THEN
-        assertFalse(result.isPresent());
+        assertEquals(null, result);
     }
 
     @Test
