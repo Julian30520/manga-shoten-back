@@ -3,7 +3,6 @@ package fr.mangashoten.dataLayer.controller;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.UserService;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +48,6 @@ public class UserController {
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
-    //@PutMapping(value="/{user_id}/{tome_id}")
     public void addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id){
 
         userService.addTomeToLibrary(user_id, tome_id);
