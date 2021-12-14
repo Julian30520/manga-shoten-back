@@ -123,7 +123,7 @@ class UserServiceTest {
         userToSend.setRole(new Role());
 
         // WHEN
-        User genericUser = userService.addUser(userToSend);
+        User genericUser = userService.createUser(userToSend);
 
         // THEN
         assertEquals(userToSend.getUserId(), genericUser.getUserId());

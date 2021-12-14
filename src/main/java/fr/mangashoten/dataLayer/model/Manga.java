@@ -34,7 +34,7 @@ public class Manga {
             orphanRemoval = true
     )
     @JoinColumn(name = "id_tome")
-    @JsonBackReference
+    @JsonManagedReference(value = "manga_tome")
     private List<Tome> tomes = new ArrayList<>();
 
     @ManyToOne(
@@ -52,7 +52,6 @@ public class Manga {
             mappedBy = "mangas",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
-    @JsonBackReference
     private List<Genre> genres = new ArrayList<>();
 
 
