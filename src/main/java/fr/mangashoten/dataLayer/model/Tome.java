@@ -31,7 +31,8 @@ public class Tome {
 
     @ManyToMany(
             mappedBy = "tomes",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL
+    )
     private List<User> users = new ArrayList<>();
 
     @ManyToOne(

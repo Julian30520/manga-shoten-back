@@ -31,4 +31,6 @@ public class MangaService {
     public Optional<Manga> findByTitleEn(String title) {
         return mangaRepository.findByTitleEn(title);
     }
+
+
 }

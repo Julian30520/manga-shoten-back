@@ -134,16 +134,25 @@ public class DataLayerApplication implements CommandLineRunner {
 //		kaiju.setSynopsis("http://dummyimage.com/224x100.png/cc0000/ffffff");
 //		kaiju.setReleaseDate("2021-08-13");
 //		kaiju.setAuthorId(1);
+
+
+		// MangaService.addManga(kaiju);
+		// mangaService.deleteMangaById(41);
+
+=======
 //
 //		// MangaService.addManga(kaiju);
 //		// mangaService.deleteMangaById(41);
 //
+
 //		Optional<Manga> manga = mangaService.findByTitleEn("mo");
 //		if(manga.isPresent()) {
 //			System.out.println(manga.get().getTitleEn());
 //		} else {
 //			System.out.println("Object not found");
 //		}
+
+
 //
 		//
 //		Manga manga = mangaService.findByTitleEn("Great!").get();
@@ -163,5 +172,9 @@ public class DataLayerApplication implements CommandLineRunner {
 
 
 
+
+//		Manga manga = new Manga();
+//		manga = mangaService.findByTitleEn("Elfenlied").get();
+//		System.out.println(manga.getAuthor().getFirstName());
 	}
 }
