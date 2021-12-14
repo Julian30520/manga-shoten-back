@@ -69,18 +69,7 @@ public class UserService {
      * Ajoute un nouvel utilisateur dans la base
      * @param user
      */
-    public boolean createUser(User user){
-        User addedUser = userRepository.save(user);
-        if(user == null) return false;
-        else return true;
-    }
-
-    /**
-     * Ajoute un nouvel utilisateur dans la base
-     * @param user
-     * @return
-     */
-    public User addUser(User user) {
+    public User createUser(User user){
         return userRepository.save(user);
     }
 

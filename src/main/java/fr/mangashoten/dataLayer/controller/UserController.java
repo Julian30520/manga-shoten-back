@@ -4,13 +4,17 @@ import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.rmi.ServerException;
 import java.util.ArrayList;
 
 @RestController()
 @CrossOrigin("*")
-@RequestMapping(value="/users")
+@RequestMapping(value="/users", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     @Autowired
@@ -38,8 +42,10 @@ public class UserController {
     }
 
     @PostMapping(value="/add")
-    public void addUser(@RequestBody User userDetails){
-        userService.createUser(userDetails);
+    public ResponseEntity<User> addUser(@RequestBody User userDetails) throws ServerException {
+        User createdUser = userService.createUser(userDetails);
+        if(createdUser == null) throw new ServerException(String.format("Impossible de créer l'utilisateur %s", userDetails.getUsername()));
+        else return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value="/{user_id}/delete")
