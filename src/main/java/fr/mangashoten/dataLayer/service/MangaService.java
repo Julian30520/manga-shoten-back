@@ -5,6 +5,7 @@ import fr.mangashoten.dataLayer.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -12,12 +13,16 @@ public class MangaService {
     @Autowired
     private MangaRepository mangaRepository;
 
-    public Iterable<Manga> getAllManga() {
-        return mangaRepository.findAll();
+    public ArrayList<Manga> getAllManga() {
+        Iterable<Manga> mangas = mangaRepository.findAll();
+        ArrayList<Manga> arrayListManga = new ArrayList<>();
+        mangas.forEach(manga -> arrayListManga.add(manga));
+
+        return arrayListManga;
     }
 
-    public Optional<Manga> getMangaById(int mangaId) {
-        return mangaRepository.findById(mangaId);
+    public Manga getMangaById(int mangaId) {
+        return mangaRepository.findById(mangaId).get();
     }
 
     public Manga addManga(Manga manga) {
@@ -28,8 +33,8 @@ public class MangaService {
         mangaRepository.deleteById(mangaId);
     }
 
-    public Optional<Manga> findByTitleEn(String title) {
-        return mangaRepository.findByTitleEn(title);
+    public Manga findByTitleEn(String title) {
+        return mangaRepository.findByTitleEn(title).get();
     }
 
 
