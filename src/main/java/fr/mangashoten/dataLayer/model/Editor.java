@@ -32,6 +32,6 @@ public class Editor {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonBackReference
+    //@JsonBackReference(value = "tomesReference")
     private List<Tome> tomes = new ArrayList<>();
 }
