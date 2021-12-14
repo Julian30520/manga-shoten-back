@@ -1,5 +1,6 @@
 package fr.mangashoten.dataLayer.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,6 +62,7 @@ public class User {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_tome")
     )
+    @JsonManagedReference
     private List<Tome> tomes = new ArrayList<>();
 
 

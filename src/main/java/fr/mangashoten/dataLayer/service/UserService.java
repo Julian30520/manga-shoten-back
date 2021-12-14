@@ -1,5 +1,8 @@
 package fr.mangashoten.dataLayer.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
@@ -7,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -14,57 +18,104 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TomeService tomeService;
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
-    }
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    /**
+     * Va chercher la liste de utilisateurs
+     * @return
+     */
+    public ArrayList<User> getUsers() {
+        Iterable<User> iteUsers = userRepository.findAll();
+        ArrayList<User> arrayUsers = new ArrayList<>();
+        iteUsers.iterator().forEachRemaining(arrayUsers::add);
+
+        return arrayUsers;
     }
 
+    /**
+     * Va chercher un utilisateur à partir de son nom
+     * @param username
+     * @return
+     */
+    public User getUserByUsername(String username) {
+        var optUser = userRepository.findByUsername(username);
+        try{
+            return optUser.get();
+        }
+        catch(NoSuchElementException ex){
+            System.out.println("Impossible de trouver l'utilisateur " + username);
+            throw ex;
+        }
+    }
+
+    /**
+     * Récupère un utilisateur à partir de son Id dans la base
+     * @param id
+     * @return
+     */
+    public User getUserById(Integer id){
+        var optUser = userRepository.findById(id);
+        try{
+            return optUser.get();
+        }
+        catch(NoSuchElementException ex){
+            System.out.println("Impossible de trouver l'utilisateur " + id);
+            throw ex;
+        }
+    }
+
+    /**
+     * Ajoute un nouvel utilisateur dans la base
+     * @param user
+     */
+    public boolean createUser(User user){
+        User addedUser = userRepository.save(user);
+        if(user == null) return false;
+        else return true;
+    }
+
+    /**
+     * Ajoute un nouvel utilisateur dans la base
+     * @param user
+     * @return
+     */
     public User addUser(User user) {
         return userRepository.save(user);
     }
 
+    /**
+     * Supprime un utilisateur de la base
+     * @param user
+     */
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
-//    public Iterable<User> getUsers() {
-//          return userRepository.findAll();
-//      }
+    /**
+     * Récupère la liste des tomes possédés par un utilisateur
+     * @param user l'utilisateur dont on veut la liste des tomes
+     * @return Une liste de tomes
+     */
+    public ArrayList<Tome> getTomes(User user){
+        return new ArrayList<Tome>(user.getTomes());
+    }
 
-    public Optional<User> getUserById(final Integer id) {
-          return userRepository.findById(id);
-      }
-
-    public User saveUser(User user) {
-          User savedUser = userRepository.save(user);
-          return savedUser;
-      }
-
-    public void deteleUser(final Integer id) {
-          userRepository.deleteById(id);
-      }
+    /**
+     * Ajoute un tome dans la librairie d'un utilisateur
+     * @param user_id
+     * @param tome_id
+     */
+    public void addTomeToLibrary(Integer user_id, Integer tome_id){
+        try{
+            User user = this.getUserById(user_id);
+            user.getTomes().add(tomeService.getTomeById(tome_id));
+            userRepository.save(user);
+        }
+        catch(Exception ex){
+            System.out.println("Une erreur est survenue lors de l'ajout du tome dans la bibliothèque.");
+            throw ex;
+        }
+    }
 
 }
-
-/**
- *
- * public Iterable<User> getUsers() {
- *         return userRepository.findAll();
- *     }
- *
- *     public Optional<User> getUserById(final Integer id) {
- *         return userRepository.findById(id);
- *     }
- *
- *     public User saveUser(User user) {
- *         User savedUser = userRepository.save(user);
- *         return savedUser;
- *     }
- *
- *     public void deteleUser(final Integer id) {
- *         userRepository.deleteById(id);
- *     }
- */

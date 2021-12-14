@@ -13,10 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,10 +76,10 @@ class UserServiceTest {
         User genericUser = userRepository.save(userToSend);
 
         // WHEN
-        Optional<User> result = userService.getUserByUsername(genericUser.getUsername());
+        User result = userService.getUserByUsername(genericUser.getUsername());
 
         // THEN
-        assertEquals(genericUser.getUsername(), result.get().getUsername());
+        assertEquals(genericUser.getUsername(), result.getUsername());
     }
 
     @Test
@@ -102,10 +99,13 @@ class UserServiceTest {
         User genericUser = userRepository.save(userToSend);
 
         // WHEN
-        Optional<User> result = userService.getUserByUsername("AnotherUsername");
+        //User result = userService.getUserByUsername("AnotherUsername");
 
         // THEN
-        assertFalse(result.isPresent());
+        //assertEquals(null, result);
+        assertThrows(Exception.class, () -> {
+            userService.getUserByUsername("AnotherUsername");
+        });
     }
 
     @Test
