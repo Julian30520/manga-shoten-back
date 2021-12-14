@@ -2,6 +2,7 @@ package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
 import fr.mangashoten.dataLayer.model.Editor;
+import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.repository.TomeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,7 @@ class TomeServiceTest {
             tomeToSend.setPageNumber(250);
             tomeToSend.setCover("urlImage");
             tomeToSend.setEditor(new Editor());
+            tomeToSend.setManga(new Manga());
             tomeToSend.setUsers(new ArrayList<>());
 
             Tome genericTome = tomeRepository.save(tomeToSend);
@@ -66,6 +68,7 @@ class TomeServiceTest {
         tomeToSend.setPageNumber(250);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
+        tomeToSend.setManga(new Manga());
         tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);
@@ -86,6 +89,7 @@ class TomeServiceTest {
         tomeToSend.setPageNumber(250);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
+        tomeToSend.setManga(new Manga());
         tomeToSend.setUsers(new ArrayList<>());
 
         // WHEN
@@ -104,6 +108,7 @@ class TomeServiceTest {
         tomeToSend.setPageNumber(250);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
+        tomeToSend.setManga(new Manga());
         tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);

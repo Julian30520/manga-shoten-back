@@ -139,7 +139,6 @@ public class DataLayerApplication implements CommandLineRunner {
 		// MangaService.addManga(kaiju);
 		// mangaService.deleteMangaById(41);
 
-=======
 //
 //		// MangaService.addManga(kaiju);
 //		// mangaService.deleteMangaById(41);
