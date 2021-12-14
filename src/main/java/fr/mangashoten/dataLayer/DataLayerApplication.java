@@ -134,22 +134,25 @@ public class DataLayerApplication implements CommandLineRunner {
 //		Optional<Manga> manga = mangaService.getMangaById(31);
 //		System.out.println(manga.get().getTitleJp());
 		// Ajouter un Manga
-		Manga kaiju = new Manga();
-		kaiju.setTitleEn("Kaiju n°8");
-		kaiju.setTitleJp("Kai");
-		kaiju.setSynopsis("http://dummyimage.com/224x100.png/cc0000/ffffff");
-		kaiju.setReleaseDate("2021-08-13");
-		kaiju.setAuthorId(1);
+//		Manga kaiju = new Manga();
+//		kaiju.setTitleEn("Kaiju n°8");
+//		kaiju.setTitleJp("Kai");
+//		kaiju.setSynopsis("http://dummyimage.com/224x100.png/cc0000/ffffff");
+//		kaiju.setReleaseDate("2021-08-13");
+//		kaiju.setAuthorId(1);
 
 		// MangaService.addManga(kaiju);
 		// mangaService.deleteMangaById(41);
 
-		Optional<Manga> manga = mangaService.findByTitleEn("mo");
-		if(manga.isPresent()) {
-			System.out.println(manga.get().getTitleEn());
-		} else {
-			System.out.println("Object not found");
-		}
+//		Optional<Manga> manga = mangaService.findByTitleEn("mo");
+//		if(manga.isPresent()) {
+//			System.out.println(manga.get().getTitleEn());
+//		} else {
+//			System.out.println("Object not found");
+//		}
 
+//		Manga manga = new Manga();
+//		manga = mangaService.findByTitleEn("Elfenlied").get();
+//		System.out.println(manga.getAuthor().getFirstName());
 	}
 }
