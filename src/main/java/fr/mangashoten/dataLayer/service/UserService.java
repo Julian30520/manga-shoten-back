@@ -6,11 +6,9 @@ import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,7 +20,6 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     TomeService tomeService;
-    private User user;
 
     /**
      * Va chercher la liste de utilisateurs
@@ -72,7 +69,18 @@ public class UserService {
      * Ajoute un nouvel utilisateur dans la base
      * @param user
      */
-    public User createUser(User user){
+    public boolean createUser(User user){
+        User addedUser = userRepository.save(user);
+        if(user == null) return false;
+        else return true;
+    }
+
+    /**
+     * Ajoute un nouvel utilisateur dans la base
+     * @param user
+     * @return
+     */
+    public User addUser(User user) {
         return userRepository.save(user);
     }
 
@@ -108,16 +116,6 @@ public class UserService {
             System.out.println("Une erreur est survenue lors de l'ajout du tome dans la bibliothèque.");
             throw ex;
         }
-    }
-
-    /**
-     * Met à jour l'utilisateur dans la base de données
-     * @param user
-     */
-    public void updateUser(User user){
-        User userToUpdate = this.getUserByUsername(user.getUsername());
-        user.setUserId(userToUpdate.getUserId());
-        userRepository.save(user);
     }
 
 }

@@ -48,7 +48,6 @@ public class Tome {
 
     @ManyToOne(
             cascade = {
-                    CascadeType.PERSIST,
                     CascadeType.MERGE
             }
     )

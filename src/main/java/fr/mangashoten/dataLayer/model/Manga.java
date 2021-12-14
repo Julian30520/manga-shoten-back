@@ -1,6 +1,7 @@
 package fr.mangashoten.dataLayer.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,6 @@ public class Manga {
     @ManyToOne(
 
             cascade = {
-                    CascadeType.PERSIST,
                     CascadeType.MERGE
             }
     )
@@ -52,6 +52,7 @@ public class Manga {
             mappedBy = "mangas",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
+    @JsonIgnoreProperties("mangas")
     private List<Genre> genres = new ArrayList<>();
 
 
