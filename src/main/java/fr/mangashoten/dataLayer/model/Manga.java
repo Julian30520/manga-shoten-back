@@ -34,7 +34,16 @@ public class Manga {
     @JoinColumn(name = "id_tome")
     private List<Tome> tomes = new ArrayList<>();
 
-    @Column(name = " id_author")
-    private int authorId;
+    @ManyToOne(
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    @JoinColumn(name = " id_author")
+    private Author author;
+
+    @ManyToMany(
+            mappedBy = "mangas",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    private List<Genre> genres = new ArrayList<>();
 
 }
