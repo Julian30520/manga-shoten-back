@@ -35,7 +35,6 @@ public class Genre {
             joinColumns = @JoinColumn(name = "id_type"),
             inverseJoinColumns = @JoinColumn(name = "id_manga")
     )
-    @JsonManagedReference
     private List<Manga> mangas = new ArrayList<>();
 
 }

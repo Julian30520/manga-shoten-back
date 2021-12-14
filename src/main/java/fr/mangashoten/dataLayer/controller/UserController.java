@@ -25,7 +25,7 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping(value="/{name}")
+    @GetMapping(value="/username/{name}")
     public User getUserByUsername(@PathVariable String name){
         return userService.getUserByUsername(name);
     }
@@ -60,5 +60,13 @@ public class UserController {
 
     }
 
+    @PatchMapping(value="/update")
+    public void updateUser(@RequestBody User userDetails){
+        try{
+            userService.updateUser(userDetails);
+        }catch(Exception ex){
+            System.out.println(String.format("Erreur lors de la mise à jour de l'utilisateur %s %s", userDetails.getFirstName(), userDetails.getLastName()));
+        }
+    }
 
 }

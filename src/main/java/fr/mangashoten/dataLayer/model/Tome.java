@@ -1,6 +1,7 @@
 package fr.mangashoten.dataLayer.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,6 @@ public class Tome {
     @ManyToMany(
             mappedBy = "tomes",
             cascade = CascadeType.ALL)
-    @JsonBackReference
     private List<User> users = new ArrayList<>();
 
     @ManyToOne(
@@ -43,7 +43,7 @@ public class Tome {
                     CascadeType.MERGE
             })
     @JoinColumn(name = "id_editor")
-    @JsonManagedReference
+    @JsonBackReference(value="editor_reference")
     private Editor editor;
 
     @ManyToOne(
@@ -53,5 +53,6 @@ public class Tome {
             }
     )
     @JoinColumn(name = "id_manga")
+    @JsonBackReference(value="manga_tome")
     private Manga manga;
 }
