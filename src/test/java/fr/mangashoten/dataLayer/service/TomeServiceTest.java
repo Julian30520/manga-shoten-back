@@ -32,7 +32,7 @@ class TomeServiceTest {
     @Test
     void get_tomesTest() {
         // GIVEN
-        List<Tome> initTomes = new ArrayList<>();
+        ArrayList<Tome> initTomes = new ArrayList<>();
 
         for (int index = 1; index <= 2; index++) {
             Tome tomeToSend = new Tome();
@@ -43,14 +43,15 @@ class TomeServiceTest {
             tomeToSend.setEditor(new Editor());
             tomeToSend.setUsers(new ArrayList<>());
 
-            Tome genericTome = tomeRepository.save(tomeToSend);
+            tomeRepository.save(tomeToSend);
             initTomes.add(tomeToSend);
         }
 
         // WHEN
-        Iterable<Tome> foundTomes = tomeService.getTomes();
-        List<Tome> result = new ArrayList<>();
-        foundTomes.forEach(tome -> result.add(tome));
+        //Iterable<Tome> foundTomes = tomeService.getTomes();
+        //List<Tome> result = new ArrayList<>();
+        //foundTomes.forEach(tome -> result.add(tome));
+        ArrayList<Tome> result = tomeService.getTomes();
 
         // THEN
         assertEquals(initTomes.get(0).getTomeId(), result.get(0).getTomeId());

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -38,9 +39,14 @@ public class UserService {
      * @return
      */
     public User getUserByUsername(String username) {
-        var user = userRepository.findByUsername(username);
-        if(user.isPresent()) return user.get();
-        else return null;
+        var optUser = userRepository.findByUsername(username);
+        try{
+            return optUser.get();
+        }
+        catch(NoSuchElementException ex){
+            System.out.println("Impossible de trouver l'utilisateur " + username);
+            throw ex;
+        }
     }
 
     /**
@@ -50,8 +56,23 @@ public class UserService {
      */
     public User getUserById(Integer id){
         var optUser = userRepository.findById(id);
-        if(optUser.isPresent()) return optUser.get();
-        else return null;
+        try{
+            return optUser.get();
+        }
+        catch(NoSuchElementException ex){
+            System.out.println("Impossible de trouver l'utilisateur " + id);
+            throw ex;
+        }
+    }
+
+    /**
+     * Ajoute un nouvel utilisateur dans la base
+     * @param user
+     */
+    public boolean createUser(User user){
+        User addedUser = userRepository.save(user);
+        if(user == null) return false;
+        else return true;
     }
 
     /**
@@ -80,10 +101,21 @@ public class UserService {
         return new ArrayList<Tome>(user.getTomes());
     }
 
+    /**
+     * Ajoute un tome dans la librairie d'un utilisateur
+     * @param user_id
+     * @param tome_id
+     */
     public void addTomeToLibrary(Integer user_id, Integer tome_id){
-        User user = this.getUserById(user_id);
-        //user.getTomes().add(tomeService.getTomeById(tome_id));
-        userRepository.save(user);
+        try{
+            User user = this.getUserById(user_id);
+            user.getTomes().add(tomeService.getTomeById(tome_id));
+            userRepository.save(user);
+        }
+        catch(Exception ex){
+            System.out.println("Une erreur est survenue lors de l'ajout du tome dans la bibliothèque.");
+            throw ex;
+        }
     }
 
 }
