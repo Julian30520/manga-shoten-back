@@ -43,8 +43,7 @@ public class Tome {
                     CascadeType.MERGE
             })
     @JoinColumn(name = "id_editor")
-    //@JsonManagedReference(value = "editorReference")
-    //@JsonIgnore
+    @JsonBackReference(value="editor_reference")
     private Editor editor;
 
     @ManyToOne(
@@ -53,6 +52,6 @@ public class Tome {
             }
     )
     @JoinColumn(name = "id_manga")
-    //@JsonBackReference(value = "mangaReference")
+    @JsonBackReference(value="manga_tome")
     private Manga manga;
 }

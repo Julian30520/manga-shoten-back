@@ -35,6 +35,7 @@ public class Manga {
             orphanRemoval = true
     )
     @JoinColumn(name = "id_tome")
+    @JsonManagedReference(value = "manga_tome")
     private List<Tome> tomes = new ArrayList<>();
 
     @ManyToOne(

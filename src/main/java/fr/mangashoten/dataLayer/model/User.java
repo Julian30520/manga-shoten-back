@@ -1,6 +1,6 @@
 package fr.mangashoten.dataLayer.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,8 +45,7 @@ public class User {
 
     @ManyToOne(
             cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST
+                    CascadeType.MERGE
             })
     @JoinColumn(name = "id_role")
     private Role role;
@@ -62,6 +61,7 @@ public class User {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_tome")
     )
+    @JsonIgnoreProperties("users")
     private List<Tome> tomes = new ArrayList<>();
 
 
