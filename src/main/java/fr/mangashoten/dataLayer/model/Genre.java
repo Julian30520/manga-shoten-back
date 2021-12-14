@@ -1,5 +1,6 @@
 package fr.mangashoten.dataLayer.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class Genre {
             joinColumns = @JoinColumn(name = "id_type"),
             inverseJoinColumns = @JoinColumn(name = "id_manga")
     )
+    @JsonManagedReference
     private List<Manga> mangas = new ArrayList<>();
 
 }
