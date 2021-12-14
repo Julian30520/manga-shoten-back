@@ -1,15 +1,7 @@
 package fr.mangashoten.dataLayer;
 
-import fr.mangashoten.dataLayer.model.Author;
-import fr.mangashoten.dataLayer.model.Manga;
-import fr.mangashoten.dataLayer.model.Role;
-import fr.mangashoten.dataLayer.model.Tome;
-import fr.mangashoten.dataLayer.model.User;
-import fr.mangashoten.dataLayer.service.AuthorService;
-import fr.mangashoten.dataLayer.service.MangaService;
-import fr.mangashoten.dataLayer.service.RoleService;
-import fr.mangashoten.dataLayer.service.TomeService;
-import fr.mangashoten.dataLayer.service.UserService;
+import fr.mangashoten.dataLayer.model.*;
+import fr.mangashoten.dataLayer.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -40,6 +32,8 @@ public class DataLayerApplication implements CommandLineRunner {
 	@Autowired
 	private MangaService mangaService;
 
+	@Autowired
+	private GenreService genreService;
 	public static void main(String[] args) {
 		SpringApplication.run(DataLayerApplication.class, args);
 	}
@@ -141,8 +135,15 @@ public class DataLayerApplication implements CommandLineRunner {
 //		kaiju.setReleaseDate("2021-08-13");
 //		kaiju.setAuthorId(1);
 
+
 		// MangaService.addManga(kaiju);
 		// mangaService.deleteMangaById(41);
+
+=======
+//
+//		// MangaService.addManga(kaiju);
+//		// mangaService.deleteMangaById(41);
+//
 
 //		Optional<Manga> manga = mangaService.findByTitleEn("mo");
 //		if(manga.isPresent()) {
@@ -150,6 +151,27 @@ public class DataLayerApplication implements CommandLineRunner {
 //		} else {
 //			System.out.println("Object not found");
 //		}
+
+
+//
+		//
+//		Manga manga = mangaService.findByTitleEn("Great!").get();
+//		System.out.println(authorService.getAuthorFullName("Great!"));
+
+		//Find all genre manga
+//		Iterable<Genre>genres = genreService.getGenres();
+//		genres.forEach(genre -> System.out.println(genre.getName()));
+
+		//find genre by manga
+//		Manga manga = mangaService.getMangaById(32).get();
+//		manga.getGenres().forEach(genre -> System.out.println(genre.getName()));
+
+		//find manga by genre
+//		Genre genre = genreService.getGenreById(1).get();
+//		genre.getMangas().forEach(manga -> System.out.println(manga.getTitleEn()));
+
+
+
 
 //		Manga manga = new Manga();
 //		manga = mangaService.findByTitleEn("Elfenlied").get();
