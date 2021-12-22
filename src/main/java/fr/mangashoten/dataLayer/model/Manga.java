@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,7 @@ public class Manga {
     private String titleJp;
     private String synopsis;
     @Column(name = "release_date")
-    private String releaseDate;
+    private Date releaseDate;
 
     @OneToMany(
             cascade = CascadeType.ALL,
