@@ -2,15 +2,23 @@ package fr.mangashoten.dataLayer.controller;
 
 import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.service.MangaService;
+import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.rmi.ServerException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -21,8 +29,18 @@ public class MangaController {
     private MangaService mangaService;
 
     @GetMapping(value = "/all")
-    public ArrayList<Manga> getAllManga() {
-        return mangaService.getAllManga();
+    public List<Object> getAllManga() {
+
+        //return mangaService.getAllManga();
+
+        //String url = "https://api.mangadex.org/manga";
+
+        String url = "https://swapi.dev/api/films";
+        RestTemplate restTemplate = new RestTemplate();
+
+        Object[] listManga = restTemplate.getForObject(url, Object[].class);
+
+        return Arrays.asList(listManga);
     }
 
     @GetMapping(value = "/{manga_id}")
