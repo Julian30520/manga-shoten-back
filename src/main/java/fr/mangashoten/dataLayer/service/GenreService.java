@@ -15,8 +15,8 @@ public class GenreService {
     public Iterable<Genre> getGenres() {
         return genreRepository.findAll();
     }
-    public Optional<Genre> getGenreById(int idType){
-        return genreRepository.findById(idType);
+    public Genre getGenreById(int idType){
+        return genreRepository.findById(idType).get();
     }
     public Genre addGenre(Genre genre) {
         return genreRepository.save(genre);
