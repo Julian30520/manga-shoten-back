@@ -80,8 +80,14 @@ public class UserService {
      * Supprime un utilisateur de la base
      * @param user
      */
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public User deleteUser(User user) {
+        try {
+            userRepository.delete(user);
+        }
+        catch(Exception e){
+            throw e;
+        }
+        return user;
     }
 
     /**
