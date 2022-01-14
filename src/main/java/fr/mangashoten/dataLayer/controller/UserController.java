@@ -49,8 +49,16 @@ public class UserController {
     }
 
     @DeleteMapping(value="/{user_id}/delete")
-    public void deleteUser(@PathVariable Integer user_id){
-        userService.deleteUser(userService.getUserById(user_id));
+    public ResponseEntity<User> deleteUser(@PathVariable Integer user_id){
+        try{
+            User userToDelete = userService.getUserById(user_id);
+            userService.deleteUser(userToDelete);
+            return new ResponseEntity(String.format("{ userId: %d }", user_id), HttpStatus.OK);
+//            return new ResponseEntity<>(userToDelete, HttpStatus.OK);
+        }
+        catch(Exception ex){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
