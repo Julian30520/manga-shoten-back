@@ -3,6 +3,9 @@ package fr.mangashoten.dataLayer.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import fr.mangashoten.dataLayer.deserializer.ListMangaDeserializer;
+import fr.mangashoten.dataLayer.deserializer.MangaDeserializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +20,7 @@ import java.util.List;
 @Table(name="manga")
 @DynamicUpdate
 @Getter @Setter @NoArgsConstructor
+@JsonDeserialize(using = ListMangaDeserializer.class)
 public class Manga {
 
     @Id
@@ -29,7 +33,7 @@ public class Manga {
     private String titleJp;
     private String synopsis;
     @Column(name = "release_date")
-    private Date releaseDate;
+    private String releaseDate;
 
     @OneToMany(
             cascade = CascadeType.ALL,

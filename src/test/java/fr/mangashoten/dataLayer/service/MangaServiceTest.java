@@ -39,7 +39,7 @@ class MangaServiceTest {
             mangaToSend.setTitleEn("TestTitleEn" + index);
             mangaToSend.setTitleJp("TestTitleJp" + index);
             mangaToSend.setSynopsis("TestLoremIpsum");
-            mangaToSend.setReleaseDate(new Date());
+            mangaToSend.setReleaseDate("2021");
             mangaToSend.setAuthor(new Author());
 
             Manga genericManga = mangaRepository.save(mangaToSend);
@@ -64,7 +64,7 @@ class MangaServiceTest {
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
-        mangaToSend.setReleaseDate(new Date());
+        mangaToSend.setReleaseDate("2021");
         mangaToSend.setAuthor(new Author());
 
         Manga genericManga = mangaRepository.save(mangaToSend);
@@ -84,7 +84,7 @@ class MangaServiceTest {
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
-        mangaToSend.setReleaseDate(new Date());
+        mangaToSend.setReleaseDate("2021");
         mangaToSend.setAuthor(new Author());
 
         // WHEN
@@ -102,7 +102,7 @@ class MangaServiceTest {
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
-        mangaToSend.setReleaseDate(new Date());
+        mangaToSend.setReleaseDate("2021");
         mangaToSend.setAuthor(new Author());
 
         Manga genericManga = mangaRepository.save(mangaToSend);
@@ -123,7 +123,7 @@ class MangaServiceTest {
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
-        mangaToSend.setReleaseDate(new Date());
+        mangaToSend.setReleaseDate("2021");
         mangaToSend.setAuthor(new Author());
 
         Manga genericManga = mangaRepository.save(mangaToSend);
