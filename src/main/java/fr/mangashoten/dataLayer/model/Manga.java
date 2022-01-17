@@ -27,9 +27,11 @@ public class Manga {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_manga")
     private int mangaId;
-    @Column(name="title_en")
+    @Column(name = "mangadex_id")
+    private String mangadexId;
+    @Column(name = "title_en")
     private String titleEn;
-    @Column(name="title_jp")
+    @Column(name= " title_jp")
     private String titleJp;
     private String cover;
     private String synopsis;
