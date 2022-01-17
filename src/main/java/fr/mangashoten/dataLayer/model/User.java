@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -65,6 +66,13 @@ public class User {
     private List<Tome> tomes = new ArrayList<>();
 
 
+    public User(String username, String mail, String password, Role role){
+        this.username = username;
+        this.password = password;
+        this.mail = mail;
+        this.role = role;
+    }
+
     public void addTome(Tome tome) {
         tomes.add(tome);
     }
@@ -72,4 +80,5 @@ public class User {
     public void removeTome(Tome tome) {
         tomes.remove(tome);
     }
+
 }

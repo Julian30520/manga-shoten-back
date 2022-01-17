@@ -2,12 +2,19 @@ package fr.mangashoten.dataLayer.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.mangashoten.dataLayer.exception.ExistingUsernameException;
+import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
 import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
+import fr.mangashoten.dataLayer.security.JwtTokenProvider;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -22,6 +29,17 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     TomeService tomeService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder; // permet l'encodage du mot de passe
+
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;	// permet la fourniture du Jeton (Token)
+
+    @Autowired
+    private AuthenticationManager authenticationManager; // gestionnaire d'authentification
+
     private User user;
 
     /**
@@ -124,6 +142,28 @@ public class UserService {
         User userToUpdate = this.getUserByUsername(user.getUsername());
         user.setUserId(userToUpdate.getUserId());
         userRepository.save(user);
+    }
+
+    /**
+     * Permet de se connecter en encodant le mot de passe avec génération du token.
+     */
+    public String signin(String username, String password) throws InvalidCredentialsException {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).get().getRole());
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException();
+        }
+    }
+
+    public String signup(User user) throws ExistingUsernameException {
+        if (!userRepository.existsByUsername(user.getUsername())) {
+            User userToSave = new User(user.getUsername(), user.getMail(), passwordEncoder.encode(user.getPassword()), user.getRole());
+            userRepository.save(userToSave);
+            return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
+        } else {
+            throw new ExistingUsernameException();
+        }
     }
 
 }

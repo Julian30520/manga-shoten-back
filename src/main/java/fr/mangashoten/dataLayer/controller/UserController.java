@@ -1,5 +1,8 @@
 package fr.mangashoten.dataLayer.controller;
 
+import fr.mangashoten.dataLayer.dto.JsonWebToken;
+import fr.mangashoten.dataLayer.exception.ExistingUsernameException;
+import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.UserService;
@@ -41,12 +44,12 @@ public class UserController {
         return userService.getTomes(user);
     }
 
-    @PostMapping(value="/add")
-    public ResponseEntity<User> addUser(@RequestBody User userDetails) throws ServerException {
-        User createdUser = userService.createUser(userDetails);
-        if(createdUser == null) throw new ServerException(String.format("Impossible de créer l'utilisateur %s", userDetails.getUsername()));
-        else return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
+//    @PostMapping(value="/add")
+//    public ResponseEntity<User> addUser(@RequestBody User userDetails) throws ServerException {
+//        User createdUser = userService.createUser(userDetails);
+//        if(createdUser == null) throw new ServerException(String.format("Impossible de créer l'utilisateur %s", userDetails.getUsername()));
+//        else return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+//    }
 
     @DeleteMapping(value="/{user_id}/delete")
     public ResponseEntity<User> deleteUser(@PathVariable Integer user_id){
@@ -74,6 +77,37 @@ public class UserController {
             userService.updateUser(userDetails);
         }catch(Exception ex){
             System.out.println(String.format("Erreur lors de la mise à jour de l'utilisateur %s %s", userDetails.getFirstName(), userDetails.getLastName()));
+        }
+    }
+
+    /**
+     * Methode pour enregistrer un nouvel utilisateur dans la BD.
+     * @param user utiliateur.
+     * @return un JWT si la connection est OK sinon une mauvaise réponse
+     */
+    @PostMapping("/sign-up")
+    public ResponseEntity<JsonWebToken> signUp(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(new JsonWebToken(userService.signup(user)));
+        } catch (ExistingUsernameException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Methode pour se connecter (le user existe déjà).
+     * @param user : utilisateur qui doit se connecter.
+     * @return un JWT si la connection est OK sinon une mauvaise réponse.
+     */
+    @PostMapping("/sign-in")
+    public ResponseEntity<JsonWebToken> signIn(@RequestBody User user) {
+        try {
+            // ici on créé un JWT en passant l'identifiant et le mot de passe
+            // récupéré de l'objet user passé en paramètre.
+            return ResponseEntity.ok(new JsonWebToken(userService.signin(user.getUsername(), user.getPassword())));
+        } catch (InvalidCredentialsException ex) {
+            // on renvoie une réponse négative
+            return ResponseEntity.badRequest().build();
         }
     }
 
