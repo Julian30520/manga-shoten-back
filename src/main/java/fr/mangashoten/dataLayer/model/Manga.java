@@ -31,6 +31,7 @@ public class Manga {
     private String titleEn;
     @Column(name="title_jp")
     private String titleJp;
+    private String cover;
     private String synopsis;
     @Column(name = "release_date")
     private String releaseDate;
