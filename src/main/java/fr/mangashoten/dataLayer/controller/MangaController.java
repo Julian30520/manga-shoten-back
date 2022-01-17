@@ -55,7 +55,9 @@ public class MangaController {
             }
         }
 
-        mangaList.forEach(manga -> System.out.println(manga.getTitleEn()));
+
+
+        //mangaList.forEach(manga -> System.out.println(manga.getTitleEn()));
 
         return mangaList;
     }
