@@ -44,20 +44,58 @@ public class MangaController {
 
         ObjectMapper mapper = new ObjectMapper();
         List<Manga> mangaList = new ArrayList<>();
+        List<String> mangaListCoverId = new ArrayList<>();
+        List<String> filenames = new ArrayList<>();
 
         JsonNode rootNode = mapper.readTree(response.getBody());
         JsonNode dataNode = rootNode.get("data");
         if(dataNode.isArray()) {
             for (JsonNode node : dataNode) {
                 Manga manga = new Manga();
+                manga.setMangadexId(node.get("id").textValue());
                 manga.setTitleEn(node.get("attributes").get("title").get("en").textValue());
+                if(node.get("attributes").get("altTitles").asToken() == JsonToken.START_ARRAY) {
+                    JsonNode altTitleNode = node.get("attributes").get("altTitles");
+                    for (JsonNode elemNode : (ArrayNode) altTitleNode) {
+                        if(elemNode.get("ja") != null) {
+                            manga.setTitleJp(elemNode.get("ja").textValue());
+                            break;
+                        }
+                        if(elemNode.get("zh") != null) {
+                            manga.setTitleJp(elemNode.get("zh").textValue());
+                            break;
+                        }
+                    }
+                }
+                manga.setSynopsis(node.get("attributes").get("description").get("en").textValue());
+                manga.setReleaseDate(node.get("attributes").get("year").asText());
+                if(node.get("relationships").asToken() == JsonToken.START_ARRAY) {
+                    JsonNode relationshipsNode = node.get("relationships");
+                    for (JsonNode elemNode : (ArrayNode) relationshipsNode) {
+                        String id = elemNode.get("id").textValue();
+                        String type = elemNode.get("type").textValue();
+                        if(type.equals("cover_art")) {
+                            mangaListCoverId.add(id);
+                            break;
+                        }
+                    }
+                }
                 mangaList.add(manga);
             }
         }
 
+        for (String mangaCoverId : mangaListCoverId) {
+            url = "https://api.mangadex.org/cover/" + mangaCoverId;
+            response = restTemplate.getForEntity(url, String.class);
+            rootNode = mapper.readTree(response.getBody());
+            filenames.add(rootNode.get("data").get("attributes").get("fileName").textValue());
+        }
 
-
-        //mangaList.forEach(manga -> System.out.println(manga.getTitleEn()));
+        int index = 0;
+        for (Manga manga : mangaList) {
+            manga.setCover(filenames.get(index));
+            index++;
+        }
 
         return mangaList;
     }
