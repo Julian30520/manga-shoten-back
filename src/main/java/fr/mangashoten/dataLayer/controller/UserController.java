@@ -111,4 +111,14 @@ public class UserController {
         }
     }
 
+//    @PatchMapping("/change-pass")
+//    public ResponseEntity<JsonWebToken> changePassword(@RequestBody User user){
+//        try{
+//            userService.updateUser(user);
+//        }
+//        catch(Exception e){
+//
+//        }
+//    }
+
 }
