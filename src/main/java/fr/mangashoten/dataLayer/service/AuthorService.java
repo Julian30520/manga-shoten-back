@@ -22,8 +22,8 @@ public class AuthorService {
     public Iterable<Author> getAllAuthor(){
         return authorRepository.findAll();
     }
-    public Optional<Author> getAuthorById(int authorId){
-        return authorRepository.findById(authorId);
+    public Author getAuthorById(int authorId){
+        return authorRepository.findById(authorId).get();
     }
     public Author addAuthor(Author author){
        return authorRepository.save(author);
