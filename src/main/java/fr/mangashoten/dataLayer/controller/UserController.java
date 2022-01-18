@@ -23,10 +23,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping(value="/all")
-    public ArrayList<User> getAllUsers(){
-        return userService.getUsers();
+    public ResponseEntity<ArrayList<User>> getAllUsers(){
+        ArrayList<User> allUsers;
+        try{
+            allUsers = userService.getUsers();
+            return ResponseEntity.ok(allUsers);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
+
 
     @GetMapping(value="/username/{name}")
     public User getUserByUsername(@PathVariable String name){
