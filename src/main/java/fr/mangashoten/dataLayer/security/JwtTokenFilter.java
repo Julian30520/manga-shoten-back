@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import fr.mangashoten.dataLayer.exception.InvalidJWTException;
@@ -33,7 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Authentication auth = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
-        } catch (InvalidJWTException ex) {
+        } catch (InvalidJWTException | UsernameNotFoundException ex) {
             // permet de garantir que le AppUser n'est pas authentifié
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(HttpStatus.BAD_REQUEST.value(), "JWT invalide !");

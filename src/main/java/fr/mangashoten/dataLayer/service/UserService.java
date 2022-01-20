@@ -1,18 +1,14 @@
 package fr.mangashoten.dataLayer.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.mangashoten.dataLayer.dto.Mapper;
 import fr.mangashoten.dataLayer.dto.UserDto;
-import fr.mangashoten.dataLayer.exception.ExistingUsernameException;
+import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
-import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
 import fr.mangashoten.dataLayer.security.JwtTokenProvider;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +16,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -183,13 +177,13 @@ public class UserService {
         }
     }
 
-    public String signup(User user) throws ExistingUsernameException {
-        if (!userRepository.existsByUsername(user.getUsername())) {
+    public String signup(User user) throws ExistingUsernameOrMailException {
+        if (!userRepository.existsByUsername(user.getUsername()) && !userRepository.existsByMail(user.getMail())) {
             User userToSave = new User(user.getUsername(), user.getMail(), passwordEncoder.encode(user.getPassword()), user.getRole());
             userRepository.save(userToSave);
             return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
         } else {
-            throw new ExistingUsernameException();
+            throw new ExistingUsernameOrMailException();
         }
     }
 
