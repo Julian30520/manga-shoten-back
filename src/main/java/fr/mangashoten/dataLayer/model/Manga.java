@@ -31,8 +31,13 @@ public class Manga {
     private String mangadexId;
     @Column(name = "title_en")
     private String titleEn;
-    @Column(name= " title_jp")
+    @Column(name= "title_jp")
     private String titleJp;
+    private String status;
+    @Column(name= "last_volume")
+    private String lastVolume;
+    @Column(name= "last_chapter")
+    private String lastChapter;
     private String cover;
     private String synopsis;
     @Column(name = "release_date")
