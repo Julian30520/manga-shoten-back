@@ -21,12 +21,10 @@ public class Author {
     @Column(name = "id_author")
     private int authorId;
 
-    @Column(name = "first_name")
-    private String firstName;
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-
+    public Author(String name) {
+        this.name = name;
+    }
 
 }
