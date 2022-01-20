@@ -40,7 +40,7 @@ public class AuthorService {
         } catch (Exception e) {
             manga = null;
         }
-        return manga.getAuthor().getLastName()+" "+manga.getAuthor().getFirstName();
+        return manga.getAuthor().getName();
     }
 
 }
