@@ -26,8 +26,8 @@ public class Tome {
     @Column(name = "number")
     private int tomeNumber;
 
-    @Column(name = "page_number")
-    private int pageNumber;
+    @Column(name = "chapter_number")
+    private int chapterNumber;
 
     @Column(name = "cover")
     private String cover;

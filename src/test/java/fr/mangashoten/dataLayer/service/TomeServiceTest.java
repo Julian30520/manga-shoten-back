@@ -39,7 +39,7 @@ class TomeServiceTest {
             Tome tomeToSend = new Tome();
             tomeToSend.setTomeId(index);
             tomeToSend.setTomeNumber(1);
-            tomeToSend.setPageNumber(250);
+            tomeToSend.setTomeNumber(20);
             tomeToSend.setCover("urlImage");
             tomeToSend.setEditor(new Editor());
             tomeToSend.setManga(new Manga());
@@ -66,7 +66,7 @@ class TomeServiceTest {
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
-        tomeToSend.setPageNumber(250);
+        tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
@@ -87,7 +87,7 @@ class TomeServiceTest {
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
-        tomeToSend.setPageNumber(250);
+        tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
@@ -106,7 +106,7 @@ class TomeServiceTest {
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
-        tomeToSend.setPageNumber(250);
+        tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
