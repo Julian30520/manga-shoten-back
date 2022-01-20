@@ -43,7 +43,7 @@ class TomeServiceTest {
             tomeToSend.setCover("urlImage");
             tomeToSend.setEditor(new Editor());
             tomeToSend.setManga(new Manga());
-            tomeToSend.setUsers(new ArrayList<>());
+            //tomeToSend.setUsers(new ArrayList<>());
 
             tomeRepository.save(tomeToSend);
             initTomes.add(tomeToSend);
@@ -70,7 +70,7 @@ class TomeServiceTest {
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
-        tomeToSend.setUsers(new ArrayList<>());
+//        tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);
 
@@ -91,7 +91,7 @@ class TomeServiceTest {
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
-        tomeToSend.setUsers(new ArrayList<>());
+//        tomeToSend.setUsers(new ArrayList<>());
 
         // WHEN
         Tome genericTome = tomeService.addTome(tomeToSend);
@@ -110,7 +110,7 @@ class TomeServiceTest {
         tomeToSend.setCover("urlImage");
         tomeToSend.setEditor(new Editor());
         tomeToSend.setManga(new Manga());
-        tomeToSend.setUsers(new ArrayList<>());
+//        tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);
 

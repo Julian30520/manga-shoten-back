@@ -62,7 +62,6 @@ public class User {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_tome")
     )
-    @JsonIgnoreProperties("users")
     private List<Tome> tomes = new ArrayList<>();
 
 
@@ -70,6 +69,17 @@ public class User {
         this.username = username;
         this.password = password;
         this.mail = mail;
+        this.role = role;
+    }
+
+    public User(int userId, String username, String mail, String avatar, String firstName, String lastName, Date dateOfBirth, Role role) {
+        this.userId = userId;
+        this.username = username;
+        this.mail = mail;
+        this.avatar = avatar;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
         this.role = role;
     }
 

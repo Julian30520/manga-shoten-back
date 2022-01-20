@@ -1,19 +1,26 @@
 package fr.mangashoten.dataLayer.controller;
 
 import fr.mangashoten.dataLayer.dto.JsonWebToken;
+import fr.mangashoten.dataLayer.dto.UserDto;
 import fr.mangashoten.dataLayer.exception.ExistingUsernameException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
+import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import fr.mangashoten.dataLayer.dto.Mapper;
 
-import java.rmi.ServerException;
-import java.util.ArrayList;
+import java.lang.reflect.Method;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController()
 @CrossOrigin("*")
@@ -23,68 +30,130 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private Mapper mapper = new Mapper();
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
 
     @GetMapping(value="/all")
-    public ResponseEntity<ArrayList<User>> getAllUsers(){
-        ArrayList<User> allUsers;
+    public ResponseEntity<ArrayList<UserDto>> getAllUsers(){
+        ArrayList<UserDto> allUsers;
         try{
-            allUsers = userService.getUsers();
+            allUsers = new ArrayList<UserDto>(userService.getUsers().stream().map(mapper::toDto).collect(toList()));
             return ResponseEntity.ok(allUsers);
         }catch(Exception e){
+            log.error("Erreur à la récupération de la  liste des utilisateurs. detail : {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
 
 
     @GetMapping(value="/username/{name}")
-    public User getUserByUsername(@PathVariable String name){
-        return userService.getUserByUsername(name);
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable String name){
+        try{
+            User user = userService.getUserByUsername(name);
+            return ResponseEntity.ok().body(mapper.toDto(user));
+        }catch(UserNotFoundException unfEx){
+            log.error(unfEx.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping (value="/{user_id}")
-    public User getUserById(@PathVariable Integer user_id){
-        return userService.getUserById(user_id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Integer user_id) throws UserNotFoundException {
+        try{
+            User user = userService.getUserById(user_id);
+            return ResponseEntity.ok().body(mapper.toDto(user));
+        }
+        catch(UserNotFoundException unfEx){
+            log.error(unfEx.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value="/{user_id}/tomes")
-    public ArrayList<Tome> getUserTomes(@PathVariable Integer user_id){
-        User user = userService.getUserById(user_id);
-        return userService.getTomes(user);
+    public ResponseEntity<ArrayList<Tome>> getUserTomes(@PathVariable Integer user_id) {
+
+        try{
+            User user = userService.getUserById(user_id);
+            return ResponseEntity.ok().body(userService.getTomes(user));
+        }
+        catch(UserNotFoundException unfEx){
+            log.error(unfEx.getMessage());
+            return ResponseEntity.notFound().build();
+        }
     }
 
-//    @PostMapping(value="/add")
-//    public ResponseEntity<User> addUser(@RequestBody User userDetails) throws ServerException {
-//        User createdUser = userService.createUser(userDetails);
-//        if(createdUser == null) throw new ServerException(String.format("Impossible de créer l'utilisateur %s", userDetails.getUsername()));
-//        else return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-//    }
 
     @DeleteMapping(value="/{user_id}/delete")
-    public ResponseEntity<User> deleteUser(@PathVariable Integer user_id){
+    public ResponseEntity<Integer> deleteUser(@PathVariable Integer user_id){
         try{
             User userToDelete = userService.getUserById(user_id);
             userService.deleteUser(userToDelete);
-            return new ResponseEntity(String.format("{ userId: %d }", user_id), HttpStatus.OK);
-//            return new ResponseEntity<>(userToDelete, HttpStatus.OK);
+            log.info("Utilisateur {} supprimé.", userToDelete.getUserId());
+            return new ResponseEntity<Integer>(userToDelete.getUserId(), HttpStatus.OK);
+        }
+        catch(UserNotFoundException unfE){
+            log.error(unfE.getMessage());
+            return ResponseEntity.notFound().build();
         }
         catch(Exception ex){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            log.error("Erreur inconnnue lors de la suppression d'un utilisateur.");
+            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
-    public void addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id){
+    public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id) {
 
-        userService.addTomeToLibrary(user_id, tome_id);
-
+        try{
+            userService.addTomeToLibrary(user_id, tome_id);
+            log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.ok().build();
+        }
+        catch(UserNotFoundException unfEx){
+            log.error(unfEx.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+    /**
+     * Resources permettant la mise à jours des information d'un utilisateur
+     * @param userDetails
+     * @return
+     */
     @PatchMapping(value="/update")
-    public void updateUser(@RequestBody User userDetails){
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDetails){
         try{
-            userService.updateUser(userDetails);
-        }catch(Exception ex){
-            System.out.println(String.format("Erreur lors de la mise à jour de l'utilisateur %s %s", userDetails.getFirstName(), userDetails.getLastName()));
+            Long debut = new Date().getTime(); //Sert à timer le processus d'update
+            User fullUser = userService.getModifiedUserFromDto(userDetails);
+
+            userService.updateUser(fullUser);
+
+            Long fin = new Date().getTime(); //Fin du timer
+
+            log.info("Utilisateur {} mis à jour en {} ms.", fullUser.getUserId(), fin - debut);
+            return ResponseEntity.ok().body(userDetails);
+        }
+        catch(UserNotFoundException unfE){
+            log.error(unfE.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception ex){
+            log.error("Erreur inconnue lors de la mise à jour de l'utilisateur {}. Détails : {}", userDetails.getId(), ex.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
