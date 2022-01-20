@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import fr.mangashoten.dataLayer.deserializer.ListMangaDeserializer;
 import fr.mangashoten.dataLayer.deserializer.MangaDeserializer;
+import fr.mangashoten.dataLayer.model.Author;
 import fr.mangashoten.dataLayer.model.Manga;
+import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.service.MangaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,15 +39,13 @@ public class MangaController {
     @GetMapping(value = "/all")
     public List<Manga> getAllManga() throws IOException, ParseException {
 
-        String url = "https://api.mangadex.org/manga";
+        String url = "https://api.mangadex.org/manga?includes[]=author&includes[]=artist&includes[]=cover_art&limit=20";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
         List<Manga> mangaList = new ArrayList<>();
-        List<String> mangaListCoverId = new ArrayList<>();
-        List<String> filenames = new ArrayList<>();
 
         JsonNode rootNode = mapper.readTree(response.getBody());
         JsonNode dataNode = rootNode.get("data");
@@ -67,34 +67,63 @@ public class MangaController {
                         }
                     }
                 }
+                manga.setStatus(node.get("attributes").get("status").textValue());
                 manga.setSynopsis(node.get("attributes").get("description").get("en").textValue());
                 manga.setReleaseDate(node.get("attributes").get("year").asText());
                 if(node.get("relationships").asToken() == JsonToken.START_ARRAY) {
                     JsonNode relationshipsNode = node.get("relationships");
                     for (JsonNode elemNode : (ArrayNode) relationshipsNode) {
-                        String id = elemNode.get("id").textValue();
-                        String type = elemNode.get("type").textValue();
-                        if(type.equals("cover_art")) {
-                            mangaListCoverId.add(id);
-                            break;
+                        if(elemNode.get("type").textValue().equals("cover_art")) {
+                            manga.setCover(elemNode.get("attributes").get("fileName").textValue());
+                        }
+                        if(elemNode.get("type").textValue().equals("author")) {
+                            manga.setAuthor(new Author(elemNode.get("attributes").get("name").textValue()));
                         }
                     }
                 }
+
+                List<Tome> mangaListTome = new ArrayList<>();
+                //Add Tome to the manga
+                String urlTome = "https://api.mangadex.org/manga/" + manga.getMangadexId() + "/aggregate";
+                ResponseEntity<String> responseTome
+                        = restTemplate.getForEntity(urlTome, String.class);
+                ObjectMapper mapperTome = new ObjectMapper();
+                JsonNode rootNodeTome = mapperTome.readTree(responseTome.getBody());
+                JsonNode volumesNode = rootNodeTome.get("volumes");
+                volumesNode.forEach(volume -> {
+                    if(volume.get("volume").asInt() >= 1) {
+                        Tome tome = new Tome();
+                        tome.setTomeNumber(volume.get("volume").asInt());
+                        tome.setChapterNumber(volume.get("count").asInt());
+                        mangaListTome.add(tome);
+                    }
+                });
+
+                List<String> chapterList = new ArrayList<>();
+                volumesNode.get("none").get("chapters").forEach(chapter -> chapterList.add(chapter.get("chapter").textValue()));
+                manga.setLastChapter(chapterList.get(0));
+
+                //Add cover for each tome
+                String urlTomeCover = "https://api.mangadex.org/cover?manga[]=" + manga.getMangadexId() + "&limit=100";
+                ResponseEntity<String> responseTomeCover
+                        = restTemplate.getForEntity(urlTomeCover, String.class);
+                ObjectMapper mapperTomeCover = new ObjectMapper();
+                JsonNode rootNodeTomeCover = mapperTomeCover.readTree(responseTomeCover.getBody());
+                JsonNode dataNodeTomeCover = rootNodeTomeCover.get("data");
+                if(dataNodeTomeCover.isArray()) {
+                    for (JsonNode nodeTomeCover : dataNodeTomeCover) {
+                        for (Tome tome : mangaListTome) {
+                            if(tome.getTomeNumber() == nodeTomeCover.get("attributes").get("volume").asInt()) {
+                                tome.setCover(nodeTomeCover.get("attributes").get("fileName").textValue());
+                            }
+                        }
+                    }
+                }
+
+                manga.setLastVolume(Integer.toString(mangaListTome.size()));
+                manga.setTomes(mangaListTome);
                 mangaList.add(manga);
             }
-        }
-
-        for (String mangaCoverId : mangaListCoverId) {
-            url = "https://api.mangadex.org/cover/" + mangaCoverId;
-            response = restTemplate.getForEntity(url, String.class);
-            rootNode = mapper.readTree(response.getBody());
-            filenames.add(rootNode.get("data").get("attributes").get("fileName").textValue());
-        }
-
-        int index = 0;
-        for (Manga manga : mangaList) {
-            manga.setCover(filenames.get(index));
-            index++;
         }
 
         return mangaList;

@@ -41,8 +41,7 @@ class AuthorServiceTest {
         for (int index = 1; index <= 2; index++) {
             Author authorToSend = new Author();
             authorToSend.setAuthorId(index);
-            authorToSend.setFirstName("TestFirstName" + index);
-            authorToSend.setLastName("TestLastName" + index);
+            authorToSend.setName("TestName" + index);
 
             Author genericAuthor = authorRepository.save(authorToSend);
             initAuthors.add(authorToSend);
@@ -63,8 +62,7 @@ class AuthorServiceTest {
         // GIVEN
         Author authorToSend = new Author();
         authorToSend.setAuthorId(1);
-        authorToSend.setFirstName("TestFirstName");
-        authorToSend.setLastName("TestLastName");
+        authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
 
@@ -80,8 +78,7 @@ class AuthorServiceTest {
         // GIVEN
         Author authorToSend = new Author();
         authorToSend.setAuthorId(1);
-        authorToSend.setFirstName("TestFirstName");
-        authorToSend.setLastName("TestLastName");
+        authorToSend.setName("TestName");
 
         // WHEN
         Author genericAuthor = authorService.addAuthor(authorToSend);
@@ -95,8 +92,7 @@ class AuthorServiceTest {
         // GIVEN
         Author authorToSend = new Author();
         authorToSend.setAuthorId(1);
-        authorToSend.setFirstName("TestFirstName");
-        authorToSend.setLastName("TestLastName");
+        authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
 
@@ -113,8 +109,7 @@ class AuthorServiceTest {
         // GIVEN
         Author authorToSend = new Author();
         authorToSend.setAuthorId(1);
-        authorToSend.setFirstName("TestFirstName");
-        authorToSend.setLastName("TestLastName");
+        authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
 
@@ -132,6 +127,6 @@ class AuthorServiceTest {
         String result = authorService.getAuthorFullName(genericManga.getTitleEn());
 
         // THEN
-        assertEquals(genericAuthor.getLastName() + " " + genericAuthor.getFirstName(), result);
+        assertEquals(genericAuthor.getName(), result);
     }
 }
