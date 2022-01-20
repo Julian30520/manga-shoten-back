@@ -2,7 +2,7 @@ package fr.mangashoten.dataLayer.controller;
 
 import fr.mangashoten.dataLayer.dto.JsonWebToken;
 import fr.mangashoten.dataLayer.dto.UserDto;
-import fr.mangashoten.dataLayer.exception.ExistingUsernameException;
+import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import fr.mangashoten.dataLayer.dto.Mapper;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -166,7 +165,13 @@ public class UserController {
     public ResponseEntity<JsonWebToken> signUp(@RequestBody User user) {
         try {
             return ResponseEntity.ok(new JsonWebToken(userService.signup(user)));
-        } catch (ExistingUsernameException ex) {
+        }
+        catch (ExistingUsernameOrMailException ex) {
+            log.warn(ex.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+        catch(Exception e){
+            log.error(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
