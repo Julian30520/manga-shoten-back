@@ -26,6 +26,10 @@ public class Genre {
     @Column(name = "name")
     public String name;
 
+    public Genre(String name) {
+        this.name = name;
+    }
+
 
     @ManyToMany(
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
