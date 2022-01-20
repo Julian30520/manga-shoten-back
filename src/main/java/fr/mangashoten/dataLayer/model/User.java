@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -61,9 +62,26 @@ public class User {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_tome")
     )
-    @JsonIgnoreProperties("users")
     private List<Tome> tomes = new ArrayList<>();
 
+
+    public User(String username, String mail, String password, Role role){
+        this.username = username;
+        this.password = password;
+        this.mail = mail;
+        this.role = role;
+    }
+
+    public User(int userId, String username, String mail, String avatar, String firstName, String lastName, Date dateOfBirth, Role role) {
+        this.userId = userId;
+        this.username = username;
+        this.mail = mail;
+        this.avatar = avatar;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+    }
 
     public void addTome(Tome tome) {
         tomes.add(tome);
@@ -72,4 +90,5 @@ public class User {
     public void removeTome(Tome tome) {
         tomes.remove(tome);
     }
+
 }

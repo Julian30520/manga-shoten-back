@@ -1,6 +1,7 @@
 package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
+import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Editor;
 import fr.mangashoten.dataLayer.model.Role;
 import fr.mangashoten.dataLayer.model.Tome;
@@ -60,7 +61,7 @@ class UserServiceTest {
     }
 
     @Test
-    void get_userByUsernameTest() {
+    void get_userByUsernameTest() throws UserNotFoundException {
         // GIVEN
         User userToSend = new User();
         userToSend.setUserId(1);
@@ -108,26 +109,6 @@ class UserServiceTest {
         });
     }
 
-    @Test
-    void add_userTest() {
-        // GIVEN
-        User userToSend = new User();
-        userToSend.setUserId(1);
-        userToSend.setUsername("TestUsername");
-        userToSend.setMail("testing@mail.com");
-        userToSend.setAvatar("urlImage");
-        userToSend.setFirstName("firstNameTest");
-        userToSend.setLastName("lastNameTest");
-        userToSend.setPassword("passwordTest");
-        userToSend.setDateOfBirth(new Date());
-        userToSend.setRole(new Role());
-
-        // WHEN
-        User genericUser = userService.createUser(userToSend);
-
-        // THEN
-        assertEquals(userToSend.getUserId(), genericUser.getUserId());
-    }
 
     @Test
     void delete_userTest() {
