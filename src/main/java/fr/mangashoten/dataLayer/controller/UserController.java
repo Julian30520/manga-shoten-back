@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import fr.mangashoten.dataLayer.dto.Mapper;
 
@@ -147,11 +148,10 @@ public class UserController {
             log.info("Utilisateur {} mis à jour en {} ms.", fullUser.getUserId(), fin - debut);
             return ResponseEntity.ok().body(userDetails);
         }
-        catch(UserNotFoundException unfE){
-            log.error(unfE.getMessage());
+        catch(UsernameNotFoundException | UserNotFoundException unnfE){
+            log.error(unnfE.getMessage());
             return ResponseEntity.notFound().build();
-        }
-        catch(Exception ex){
+        } catch(Exception ex){
             log.error("Erreur inconnue lors de la mise à jour de l'utilisateur {}. Détails : {}", userDetails.getId(), ex.getMessage());
             return ResponseEntity.badRequest().build();
         }
