@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/users/sign-in").permitAll() // se connecter
                 .antMatchers("/users/sign-up").permitAll() // s'inscrire
+                .antMatchers("/manga/**").permitAll()
                 .antMatchers("/users/all").hasAuthority("ROLE_ADMIN") // que pour le rôle admin
                 // on désactive le reste...
                 .anyRequest().authenticated();
