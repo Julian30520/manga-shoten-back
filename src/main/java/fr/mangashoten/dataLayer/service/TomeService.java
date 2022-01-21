@@ -23,7 +23,7 @@ public class TomeService {
         return arrayTomes;
     }
 
-    public Tome getTomeById(int tomeId) {
+    public Tome getTomeById(String tomeId) {
         var optTome = tomeRepository.findById(tomeId);
         try{
             return optTome.get();

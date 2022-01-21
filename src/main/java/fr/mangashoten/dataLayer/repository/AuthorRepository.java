@@ -8,6 +8,6 @@ import javax.persistence.Entity;
 import java.util.Optional;
 
 @Repository
-public interface AuthorRepository extends CrudRepository<Author,Integer> {
+public interface AuthorRepository extends CrudRepository<Author,String> {
 
 }

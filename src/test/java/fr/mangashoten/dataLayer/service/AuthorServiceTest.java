@@ -40,7 +40,7 @@ class AuthorServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Author authorToSend = new Author();
-            authorToSend.setAuthorId(index);
+            authorToSend.setAuthorId(Integer.toString(index));
             authorToSend.setName("TestName" + index);
 
             Author genericAuthor = authorRepository.save(authorToSend);
@@ -61,7 +61,7 @@ class AuthorServiceTest {
     void get_AuthorByIdTest() {
         // GIVEN
         Author authorToSend = new Author();
-        authorToSend.setAuthorId(1);
+        authorToSend.setAuthorId("1");
         authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
@@ -77,7 +77,7 @@ class AuthorServiceTest {
     void add_AuthorTest() {
         // GIVEN
         Author authorToSend = new Author();
-        authorToSend.setAuthorId(1);
+        authorToSend.setAuthorId("1");
         authorToSend.setName("TestName");
 
         // WHEN
@@ -91,7 +91,7 @@ class AuthorServiceTest {
     void delete_AuthorTest() {
         // GIVEN
         Author authorToSend = new Author();
-        authorToSend.setAuthorId(1);
+        authorToSend.setAuthorId("1");
         authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
@@ -100,21 +100,21 @@ class AuthorServiceTest {
         authorService.deleteAuthor(genericAuthor.getAuthorId());
 
         // THEN
-        assertEquals(1, genericAuthor.getAuthorId());
-        assertEquals(Optional.empty(), authorRepository.findById(1));
+        assertEquals("1", genericAuthor.getAuthorId());
+        assertEquals(Optional.empty(), authorRepository.findById("1"));
     }
 
     @Test
     void get_AuthorFullNameTest() {
         // GIVEN
         Author authorToSend = new Author();
-        authorToSend.setAuthorId(1);
+        authorToSend.setAuthorId("1");
         authorToSend.setName("TestName");
 
         Author genericAuthor = authorRepository.save(authorToSend);
 
         Manga mangaToSend = new Manga();
-        mangaToSend.setMangaId(1);
+        mangaToSend.setMangaId("1");
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");

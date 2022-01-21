@@ -18,15 +18,18 @@ import java.util.List;
 public class Editor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_editor")
-    private int editorId;
+    private String editorId;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "website")
     private String webUrl;
+
+    public Editor(String id) {
+        editorId = id;
+    }
 
     @OneToMany(
             mappedBy = "editor",
