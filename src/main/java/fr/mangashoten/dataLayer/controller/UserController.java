@@ -112,8 +112,9 @@ public class UserController {
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
+    @PutMapping(value="/{user_id}/{tome_id}")
     public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id) {
-
+        //TODO: Ajouter le tome dans la base de données à partir de MangaDex si il n'est pas encore présent dans notre base à nous.
         try{
             userService.addTomeToLibrary(user_id, tome_id);
             log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tome_id, user_id);
@@ -129,12 +130,15 @@ public class UserController {
         }
     }
 
+
+
     /**
      * Resources permettant la mise à jours des information d'un utilisateur
      * @param userDetails
      * @return
      */
     @PatchMapping(value="/update")
+    @PutMapping(value="/update")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDetails){
         try{
             Long debut = new Date().getTime(); //Sert à timer le processus d'update
