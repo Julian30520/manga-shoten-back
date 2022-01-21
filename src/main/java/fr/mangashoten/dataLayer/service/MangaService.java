@@ -128,6 +128,7 @@ public class MangaService {
                 manga.setStatus(node.get("attributes").get("status").textValue());
                 manga.setSynopsis(node.get("attributes").get("description").get("en").textValue());
                 manga.setReleaseDate(node.get("attributes").get("year").asText());
+                manga.setPubDemographic(node.get("attributes").get("publicationDemographic").asText());
                 if(node.get("relationships").asToken() == JsonToken.START_ARRAY) {
                     JsonNode relationshipsNode = node.get("relationships");
                     for (JsonNode elemNode : relationshipsNode) {
