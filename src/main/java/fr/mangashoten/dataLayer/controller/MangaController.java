@@ -8,10 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import fr.mangashoten.dataLayer.deserializer.ListMangaDeserializer;
 import fr.mangashoten.dataLayer.deserializer.MangaDeserializer;
-import fr.mangashoten.dataLayer.model.Author;
-import fr.mangashoten.dataLayer.model.Genre;
-import fr.mangashoten.dataLayer.model.Manga;
-import fr.mangashoten.dataLayer.model.Tome;
+import fr.mangashoten.dataLayer.model.*;
 import fr.mangashoten.dataLayer.service.MangaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,7 +35,7 @@ public class MangaController {
     private MangaDeserializer mangaDeserializer;
 
     @GetMapping(value = "/all")
-    public List<Manga> getAllManga() throws IOException {
+    public List<MangaShort> getAllManga() throws IOException {
         return this.mangaService.getAllMangaFromApi();
     }
 
@@ -49,9 +46,7 @@ public class MangaController {
 
     @GetMapping(value = "/title/{manga_name}")
     public Manga getMangaByTitle(@PathVariable String manga_name) throws JsonProcessingException {
-        //A terminer !
-        //String url = "https://api.mangadex.org/manga/a1c7c817-4e59-43b7-9365-09675a149a6f";
-        String url = "https://api.mangadex.org/manga";
+        String url = "https://api.mangadex.org/manga?title=";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url, String.class);
