@@ -127,7 +127,7 @@ public class UserService {
      * @return
      * @throws UserNotFoundException
      */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException, TomeNotFoundException{
+    public Tome deleteTomeFromUserLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException{
         User user = this.getUserById(user_id);
         Tome tome = tomeService.getTomeById(tome_id);
         user.removeTome(tome);
