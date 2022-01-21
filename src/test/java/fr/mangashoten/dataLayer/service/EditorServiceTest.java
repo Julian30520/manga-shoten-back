@@ -36,7 +36,7 @@ class EditorServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Editor editorToSend = new Editor();
-            editorToSend.setEditorId(index);
+            editorToSend.setEditorId(Integer.toString(index));
             editorToSend.setName("test" + index);
             editorToSend.setWebUrl("Url" + index);
             editorToSend.setTomes(initTomes);
@@ -61,7 +61,7 @@ class EditorServiceTest {
         Editor editorToSend = new Editor();
         List<Tome> initTomes = new ArrayList<>();
 
-        editorToSend.setEditorId(1);
+        editorToSend.setEditorId("1");
         editorToSend.setName("test");
         editorToSend.setWebUrl("Url");
         editorToSend.setTomes(initTomes);

@@ -1,13 +1,6 @@
 package fr.mangashoten.dataLayer.controller;
 
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import fr.mangashoten.dataLayer.deserializer.ListMangaDeserializer;
-import fr.mangashoten.dataLayer.deserializer.MangaDeserializer;
 import fr.mangashoten.dataLayer.model.*;
 import fr.mangashoten.dataLayer.service.MangaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.rmi.ServerException;
-import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -30,9 +21,6 @@ public class MangaController {
 
     @Autowired
     private MangaService mangaService;
-
-    @Autowired
-    private MangaDeserializer mangaDeserializer;
 
     @GetMapping(value = "/all/{limit}")
     public List<MangaShort> getAllManga(@PathVariable String limit) throws IOException {
@@ -67,7 +55,7 @@ public class MangaController {
     }
 
     @DeleteMapping(value = "/delete/{manga_id}")
-    public ResponseEntity<String> deleteMangaById(@PathVariable Integer manga_id) {
+    public ResponseEntity<String> deleteMangaById(@PathVariable String manga_id) {
         final HttpHeaders httpHeaders= new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 

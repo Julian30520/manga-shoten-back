@@ -113,7 +113,7 @@ public class UserController {
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
-    public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id) {
+    public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable String tome_id) {
 
         try{
             userService.addTomeToLibrary(user_id, tome_id);

@@ -17,7 +17,7 @@ public class EditorService {
         return editorRepository.findAll();
     }
 
-    public Optional<Editor> getEditorById(int editorId) {
+    public Optional<Editor> getEditorById(String editorId) {
         return editorRepository.findById(editorId);
     }
 

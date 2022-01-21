@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Getter @Setter @NoArgsConstructor
 public class MangaShort {
 
-    private String mangadexId;
+    private String mangaId;
     private String titleEn;
     private String lastVolume;
     private String lastChapter;

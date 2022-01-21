@@ -15,14 +15,14 @@ public class GenreService {
     public Iterable<Genre> getGenres() {
         return genreRepository.findAll();
     }
-    public Genre getGenreById(int idType){
+    public Genre getGenreById(String idType){
         return genreRepository.findById(idType).get();
     }
     public Genre addGenre(Genre genre) {
         return genreRepository.save(genre);
     }
 
-    public void deleteByGenre(int idType) {
+    public void deleteByGenre(String idType) {
         genreRepository.deleteById(idType);
     }
 

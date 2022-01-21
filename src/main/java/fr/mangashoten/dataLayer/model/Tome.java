@@ -15,9 +15,8 @@ import javax.persistence.*;
 public class Tome {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tome")
-    private int tomeId;
+    private String tomeId;
 
     @Column(name = "number")
     private int tomeNumber;

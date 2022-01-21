@@ -19,9 +19,8 @@ import java.util.List;
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_type")
-    public int idType;
+    public String idType;
 
     @Column(name = "name")
     public String name;

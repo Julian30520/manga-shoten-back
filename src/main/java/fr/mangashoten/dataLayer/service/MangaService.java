@@ -30,7 +30,7 @@ public class MangaService {
         return arrayListManga;
     }
 
-    public Manga getMangaById(int mangaId) {
+    public Manga getMangaById(String mangaId) {
         return mangaRepository.findById(mangaId).get();
     }
 
@@ -38,7 +38,7 @@ public class MangaService {
         return  mangaRepository.save(manga);
     }
 
-    public void deleteMangaById(int mangaId) {
+    public void deleteMangaById(String mangaId) {
         mangaRepository.deleteById(mangaId);
     }
 
@@ -64,7 +64,7 @@ public class MangaService {
         JsonNode dataNode = rootNode.get("data");
         if(dataNode.isArray()) {
             for (JsonNode node : dataNode) {
-                manga.setMangadexId(node.get("id").textValue());
+                manga.setMangaId(node.get("id").textValue());
                 if(node.get("attributes").get("title").has("en")) {
                     manga.setTitleEn(node.get("attributes").get("title").get("en").textValue());
                 } else if(node.get("attributes").get("title").has("ja")) {
@@ -112,7 +112,7 @@ public class MangaService {
 
                 List<Tome> mangaListTome = new ArrayList<>();
                 //Add Tome to the manga
-                String urlTome = "https://api.mangadex.org/manga/" + manga.getMangadexId() + "/aggregate";
+                String urlTome = "https://api.mangadex.org/manga/" + manga.getMangaId() + "/aggregate";
                 ResponseEntity<String> responseTome
                         = restTemplate.getForEntity(urlTome, String.class);
                 ObjectMapper mapperTome = new ObjectMapper();
@@ -130,7 +130,7 @@ public class MangaService {
                 manga.setLastChapter(node.get("attributes").get("lastChapter").textValue());
 
                 //Add cover for each tome
-                String urlTomeCover = "https://api.mangadex.org/cover?manga[]=" + manga.getMangadexId() + "&limit=100";
+                String urlTomeCover = "https://api.mangadex.org/cover?manga[]=" + manga.getMangaId() + "&limit=100";
                 ResponseEntity<String> responseTomeCover
                         = restTemplate.getForEntity(urlTomeCover, String.class);
                 ObjectMapper mapperTomeCover = new ObjectMapper();
@@ -172,7 +172,7 @@ public class MangaService {
         if(dataNode.isArray()) {
             for (JsonNode node : dataNode) {
                 MangaShort manga = new MangaShort();
-                manga.setMangadexId(node.get("id").textValue());
+                manga.setMangaId(node.get("id").textValue());
                 if(node.get("attributes").get("title").has("en")) {
                     manga.setTitleEn(node.get("attributes").get("title").get("en").textValue());
                 } else if(node.get("attributes").get("title").has("ja")) {
