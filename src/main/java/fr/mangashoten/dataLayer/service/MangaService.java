@@ -45,8 +45,8 @@ public class MangaService {
         return mangaRepository.findByTitleEn(title).get();
     }
 
-    public List<MangaShort> getAllMangaFromApi() throws IOException {
-        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=30";
+    public List<MangaShort> getAllMangaFromApi(String limit) throws IOException {
+        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url, String.class);

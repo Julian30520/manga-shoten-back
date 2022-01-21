@@ -34,9 +34,9 @@ public class MangaController {
     @Autowired
     private MangaDeserializer mangaDeserializer;
 
-    @GetMapping(value = "/all")
-    public List<MangaShort> getAllManga() throws IOException {
-        return this.mangaService.getAllMangaFromApi();
+    @GetMapping(value = "/all/{limit}")
+    public List<MangaShort> getAllManga(@PathVariable String limit) throws IOException {
+        return this.mangaService.getAllMangaFromApi(limit);
     }
 
     @GetMapping(value = "/{manga_id}")
