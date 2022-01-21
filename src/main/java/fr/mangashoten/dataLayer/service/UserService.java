@@ -116,8 +116,28 @@ public class UserService {
     public void addTomeToLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException {
         try{
             User user = this.getUserById(user_id);
-            user.getTomes().add(tomeService.getTomeById(tome_id));
+            user.addTome(tomeService.getTomeById(tome_id));
             userRepository.save(user);
+        }
+        catch(NoSuchElementException nseE){
+            throw new UserNotFoundException(user_id);
+        }
+    }
+
+    /**
+     * Retire un tome de la bibliothèque de l'utilisateur
+     * @param user_id
+     * @param tome_id
+     * @return
+     * @throws UserNotFoundException
+     */
+    public Tome deleteTomeFromUserLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException{
+        try{
+            User user = this.getUserById(user_id);
+            Tome tome = tomeService.getTomeById(tome_id);
+            user.removeTome(tome);
+            userRepository.save(user);
+            return tome;
         }
         catch(NoSuchElementException nseE){
             throw new UserNotFoundException(user_id);

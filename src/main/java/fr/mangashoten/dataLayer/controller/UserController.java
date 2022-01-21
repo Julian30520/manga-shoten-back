@@ -130,7 +130,22 @@ public class UserController {
         }
     }
 
-
+    @DeleteMapping(value="/{user_id}/{tome_id}")
+    public ResponseEntity deleteTomeFromUserLibrary(@PathVariable Integer user_id, @PathVariable Integer tome_id){
+        try{
+            userService.deleteTomeFromUserLibrary(user_id, tome_id);
+            log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.ok().build();
+        }
+        catch(UserNotFoundException e){
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     /**
      * Resources permettant la mise à jours des information d'un utilisateur
