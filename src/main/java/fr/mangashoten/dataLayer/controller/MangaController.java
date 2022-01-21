@@ -40,8 +40,8 @@ public class MangaController {
     }
 
     @GetMapping(value = "/{manga_id}")
-    public Manga getMangaById(@PathVariable Integer manga_id) {
-        return mangaService.getMangaById(manga_id);
+    public Manga getMangaById(@PathVariable String manga_id) throws JsonProcessingException {
+        return mangaService.getMangaByIdFromApi(manga_id);
     }
 
     @GetMapping(value = "/title/{manga_name}")
