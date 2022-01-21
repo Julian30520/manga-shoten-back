@@ -3,11 +3,8 @@ package fr.mangashoten.dataLayer.service;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import fr.mangashoten.dataLayer.model.Author;
-import fr.mangashoten.dataLayer.model.Genre;
 import fr.mangashoten.dataLayer.model.Manga;
-import fr.mangashoten.dataLayer.model.Tome;
+import fr.mangashoten.dataLayer.model.MangaShort;
 import fr.mangashoten.dataLayer.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class MangaService {
@@ -49,8 +45,63 @@ public class MangaService {
         return mangaRepository.findByTitleEn(title).get();
     }
 
-    public List<Manga> getAllMangaFromApi() throws IOException {
-        String url = "https://api.mangadex.org/manga?includes[]=author&includes[]=artist&includes[]=cover_art&limit=20";
+    public List<MangaShort> getAllMangaFromApi(String limit) throws IOException {
+        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response
+                = restTemplate.getForEntity(url, String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<MangaShort> mangaList = new ArrayList<>();
+
+        JsonNode rootNode = mapper.readTree(response.getBody());
+        JsonNode dataNode = rootNode.get("data");
+        if(dataNode.isArray()) {
+            for (JsonNode node : dataNode) {
+                MangaShort manga = new MangaShort();
+                manga.setMangadexId(node.get("id").textValue());
+                manga.setTitleEn(node.get("attributes").get("title").get("en").textValue());
+                if(node.get("relationships").asToken() == JsonToken.START_ARRAY) {
+                    JsonNode relationshipsNode = node.get("relationships");
+                    for (JsonNode elemNode : relationshipsNode) {
+                        if(elemNode.get("type").textValue().equals("cover_art")) {
+                            manga.setCover(elemNode.get("attributes").get("fileName").textValue());
+                        }
+                    }
+                }
+
+                //Add Tome to the manga
+                String urlTome = "https://api.mangadex.org/manga/" + manga.getMangadexId() + "/aggregate";
+                ResponseEntity<String> responseTome
+                        = restTemplate.getForEntity(urlTome, String.class);
+                ObjectMapper mapperTome = new ObjectMapper();
+                JsonNode rootNodeTome = mapperTome.readTree(responseTome.getBody());
+                JsonNode volumesNode = rootNodeTome.get("volumes");
+                AtomicInteger volumeCount = new AtomicInteger();
+                volumesNode.forEach(volume -> {
+                    if(volume.get("volume").asInt() >= 1) {
+                        volumeCount.getAndIncrement();
+                    }
+                });
+                manga.setLastVolume(volumeCount.toString());
+
+                List<String> chapterList = new ArrayList<>();
+                volumesNode.get("none").get("chapters").forEach(chapter -> chapterList.add(chapter.get("chapter").textValue()));
+                manga.setLastChapter(chapterList.get(0));
+
+                mangaList.add(manga);
+            }
+        }
+
+        return mangaList;
+    }
+
+    public List<Manga> getAllMangaFromApiSearchbar() throws IOException {
+        return null;
+    }
+
+    /*
+    * String url = "https://api.mangadex.org/manga?includes[]=author&includes[]=artist&includes[]=cover_art&limit=20";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response
                 = restTemplate.getForEntity(url, String.class);
@@ -147,6 +198,6 @@ public class MangaService {
         }
 
         return mangaList;
-    }
+    * */
 
 }
