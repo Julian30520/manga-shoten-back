@@ -38,12 +38,12 @@ class TomeServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Tome tomeToSend = new Tome();
-            tomeToSend.setTomeId(index);
+            tomeToSend.setTomeId(Integer.toString(index));
             tomeToSend.setTomeNumber(1);
             tomeToSend.setTomeNumber(20);
             tomeToSend.setCover("urlImage");
-            tomeToSend.setEditor(new Editor());
-            tomeToSend.setManga(new Manga());
+            tomeToSend.setEditor(new Editor(Integer.toString(index)));
+            tomeToSend.setManga(new Manga(Integer.toString(index)));
             //tomeToSend.setUsers(new ArrayList<>());
 
             tomeRepository.save(tomeToSend);
@@ -65,12 +65,12 @@ class TomeServiceTest {
     void get_tomeByIdTest() throws TomeNotFoundException {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId(1);
+        tomeToSend.setTomeId("1");
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor());
-        tomeToSend.setManga(new Manga());
+        tomeToSend.setEditor(new Editor("1"));
+        tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);
@@ -86,12 +86,12 @@ class TomeServiceTest {
     void add_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId(1);
+        tomeToSend.setTomeId("1");
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor());
-        tomeToSend.setManga(new Manga());
+        tomeToSend.setEditor(new Editor("1"));
+        tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 
         // WHEN
@@ -105,12 +105,12 @@ class TomeServiceTest {
     void delete_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId(1);
+        tomeToSend.setTomeId("1");
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor());
-        tomeToSend.setManga(new Manga());
+        tomeToSend.setEditor(new Editor("1"));
+        tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 
         Tome genericTome = tomeRepository.save(tomeToSend);
@@ -119,7 +119,7 @@ class TomeServiceTest {
         tomeService.deleteTome(genericTome);
 
         // THEN
-        assertEquals(1, genericTome.getTomeId());
-        assertEquals(Optional.empty(), tomeRepository.findById(1));
+        assertEquals("1", genericTome.getTomeId());
+        assertEquals(Optional.empty(), tomeRepository.findById("1"));
     }
 }

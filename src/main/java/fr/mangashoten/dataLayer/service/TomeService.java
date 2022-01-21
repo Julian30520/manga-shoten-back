@@ -24,7 +24,8 @@ public class TomeService {
         return arrayTomes;
     }
 
-    public Tome getTomeById(int tomeId) throws TomeNotFoundException {
+    public Tome getTomeById(String tomeId) throws TomeNotFoundException {
+
         var optTome = tomeRepository.findById(tomeId);
         try{
             return optTome.get();

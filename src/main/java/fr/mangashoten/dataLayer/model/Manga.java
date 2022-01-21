@@ -2,8 +2,6 @@ package fr.mangashoten.dataLayer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import fr.mangashoten.dataLayer.deserializer.ListMangaDeserializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,28 +15,38 @@ import java.util.List;
 @Table(name="manga")
 @DynamicUpdate
 @Getter @Setter @NoArgsConstructor
-@JsonDeserialize(using = ListMangaDeserializer.class)
 public class Manga {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_manga")
-    private int mangaId;
-    @Column(name = "mangadex_id")
-    private String mangadexId;
+    private String mangaId;
+
     @Column(name = "title_en")
     private String titleEn;
+
     @Column(name= "title_jp")
     private String titleJp;
+
     private String status;
+
+    @Column(name= "publication_demographic")
+    private String pubDemographic;
+
     @Column(name= "last_volume")
     private String lastVolume;
+
     @Column(name= "last_chapter")
     private String lastChapter;
+
     private String cover;
     private String synopsis;
+
     @Column(name = "release_date")
     private String releaseDate;
+
+    public Manga(String id) {
+        mangaId = id;
+    }
 
     @OneToMany(
             cascade = CascadeType.ALL,

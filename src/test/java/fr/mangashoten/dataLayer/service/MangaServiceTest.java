@@ -35,12 +35,12 @@ class MangaServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Manga mangaToSend = new Manga();
-            mangaToSend.setMangaId(index);
+            mangaToSend.setMangaId(Integer.toString(index));
             mangaToSend.setTitleEn("TestTitleEn" + index);
             mangaToSend.setTitleJp("TestTitleJp" + index);
             mangaToSend.setSynopsis("TestLoremIpsum");
             mangaToSend.setReleaseDate("2021");
-            mangaToSend.setAuthor(new Author());
+            mangaToSend.setAuthor(new Author("Test", Integer.toString(index)));
 
             Manga genericManga = mangaRepository.save(mangaToSend);
             initMangas.add(mangaToSend);
@@ -60,12 +60,12 @@ class MangaServiceTest {
     void get_MangaByIdTest() {
         // GIVEN
         Manga mangaToSend = new Manga();
-        mangaToSend.setMangaId(1);
+        mangaToSend.setMangaId("1");
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
         mangaToSend.setReleaseDate("2021");
-        mangaToSend.setAuthor(new Author());
+        mangaToSend.setAuthor(new Author("Test", "1"));
 
         Manga genericManga = mangaRepository.save(mangaToSend);
 
@@ -80,12 +80,12 @@ class MangaServiceTest {
     void add_MangaTest() {
         // GIVEN
         Manga mangaToSend = new Manga();
-        mangaToSend.setMangaId(1);
+        mangaToSend.setMangaId("1");
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
         mangaToSend.setReleaseDate("2021");
-        mangaToSend.setAuthor(new Author());
+        mangaToSend.setAuthor(new Author("Test", "1"));
 
         // WHEN
         Manga genericManga = mangaService.addManga(mangaToSend);
@@ -98,12 +98,12 @@ class MangaServiceTest {
     void delete_MangaByIdTest() {
         // GIVEN
         Manga mangaToSend = new Manga();
-        mangaToSend.setMangaId(1);
+        mangaToSend.setMangaId("1");
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
         mangaToSend.setReleaseDate("2021");
-        mangaToSend.setAuthor(new Author());
+        mangaToSend.setAuthor(new Author("Test", "1"));
 
         Manga genericManga = mangaRepository.save(mangaToSend);
 
@@ -111,20 +111,20 @@ class MangaServiceTest {
         mangaService.deleteMangaById(genericManga.getMangaId());
 
         // THEN
-        assertEquals(1, genericManga.getMangaId());
-        assertEquals(Optional.empty(), mangaRepository.findById(1));
+        assertEquals("1", genericManga.getMangaId());
+        assertEquals(Optional.empty(), mangaRepository.findById("1"));
     }
 
     @Test
     void find_ByTitleEnTest() {
         // GIVEN
         Manga mangaToSend = new Manga();
-        mangaToSend.setMangaId(1);
+        mangaToSend.setMangaId("1");
         mangaToSend.setTitleEn("TestTitleEn");
         mangaToSend.setTitleJp("TestTitleJp");
         mangaToSend.setSynopsis("TestLoremIpsum");
         mangaToSend.setReleaseDate("2021");
-        mangaToSend.setAuthor(new Author());
+        mangaToSend.setAuthor(new Author("Test", "1"));
 
         Manga genericManga = mangaRepository.save(mangaToSend);
 

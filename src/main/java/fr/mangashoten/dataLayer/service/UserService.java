@@ -114,7 +114,7 @@ public class UserService {
      * @param user_id
      * @param tome_id
      */
-    public void addTomeToLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException, TomeNotFoundException {
+    public void addTomeToLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException {
         User user = this.getUserById(user_id);
         user.addTome(tomeService.getTomeById(tome_id));
         userRepository.save(user);

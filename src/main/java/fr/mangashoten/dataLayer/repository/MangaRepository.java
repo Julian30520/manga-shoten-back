@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface MangaRepository extends CrudRepository<Manga, Integer> {
+public interface MangaRepository extends CrudRepository<Manga, String> {
     public Optional<Manga> findByTitleEn(String title);
 }

@@ -22,13 +22,13 @@ public class AuthorService {
     public Iterable<Author> getAllAuthor(){
         return authorRepository.findAll();
     }
-    public Author getAuthorById(int authorId){
+    public Author getAuthorById(String authorId){
         return authorRepository.findById(authorId).get();
     }
     public Author addAuthor(Author author){
        return authorRepository.save(author);
     }
-    public void deleteAuthor(int idAuthor){
+    public void deleteAuthor(String idAuthor){
         authorRepository.deleteById(idAuthor);
     }
 
