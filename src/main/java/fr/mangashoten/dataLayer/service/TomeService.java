@@ -1,5 +1,6 @@
 package fr.mangashoten.dataLayer.service;
 
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.TomeRepository;
@@ -23,12 +24,13 @@ public class TomeService {
         return arrayTomes;
     }
 
-    public Tome getTomeById(String tomeId) {
+    public Tome getTomeById(String tomeId) throws TomeNotFoundException {
+
         var optTome = tomeRepository.findById(tomeId);
         try{
             return optTome.get();
         }catch(NoSuchElementException ex){
-            return null;
+            throw new TomeNotFoundException(tomeId);
         }
     }
 

@@ -1,6 +1,7 @@
 package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.model.Editor;
 import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
@@ -61,7 +62,7 @@ class TomeServiceTest {
     }
 
     @Test
-    void get_tomeByIdTest() {
+    void get_tomeByIdTest() throws TomeNotFoundException {
         // GIVEN
         Tome tomeToSend = new Tome();
         tomeToSend.setTomeId("1");

@@ -4,6 +4,7 @@ import fr.mangashoten.dataLayer.dto.JsonWebToken;
 import fr.mangashoten.dataLayer.dto.UserDto;
 import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
@@ -112,15 +113,34 @@ public class UserController {
     }
 
     @PatchMapping(value="/{user_id}/{tome_id}")
+    @PutMapping(value="/{user_id}/{tome_id}")
     public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable String tome_id) {
+        //TODO: Ajouter le tome dans la base de données à partir de MangaDex si il n'est pas encore présent dans notre base à nous.
 
         try{
             userService.addTomeToLibrary(user_id, tome_id);
             log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tome_id, user_id);
             return ResponseEntity.ok().build();
         }
-        catch(UserNotFoundException unfEx){
+        catch(UserNotFoundException | TomeNotFoundException unfEx){
             log.error(unfEx.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping(value="/{user_id}/{tome_id}")
+    public ResponseEntity deleteTomeFromUserLibrary(@PathVariable Integer user_id, @PathVariable String tome_id){
+        try{
+            userService.deleteTomeFromUserLibrary(user_id, tome_id);
+            log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.ok().build();
+        }
+        catch(UserNotFoundException | TomeNotFoundException e){
+            log.error(e.getMessage());
             return ResponseEntity.notFound().build();
         }
         catch(Exception e){
@@ -135,6 +155,7 @@ public class UserController {
      * @return
      */
     @PatchMapping(value="/update")
+    @PutMapping(value="/update")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDetails){
         try{
             Long debut = new Date().getTime(); //Sert à timer le processus d'update
