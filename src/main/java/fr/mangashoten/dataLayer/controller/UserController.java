@@ -4,6 +4,7 @@ import fr.mangashoten.dataLayer.dto.JsonWebToken;
 import fr.mangashoten.dataLayer.dto.UserDto;
 import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
@@ -120,7 +121,7 @@ public class UserController {
             log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tome_id, user_id);
             return ResponseEntity.ok().build();
         }
-        catch(UserNotFoundException unfEx){
+        catch(UserNotFoundException | TomeNotFoundException unfEx){
             log.error(unfEx.getMessage());
             return ResponseEntity.notFound().build();
         }
@@ -137,7 +138,7 @@ public class UserController {
             log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
             return ResponseEntity.ok().build();
         }
-        catch(UserNotFoundException e){
+        catch(UserNotFoundException | TomeNotFoundException e){
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
         }

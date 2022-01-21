@@ -4,6 +4,7 @@ import fr.mangashoten.dataLayer.dto.Mapper;
 import fr.mangashoten.dataLayer.dto.UserDto;
 import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
@@ -113,15 +114,10 @@ public class UserService {
      * @param user_id
      * @param tome_id
      */
-    public void addTomeToLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException {
-        try{
-            User user = this.getUserById(user_id);
-            user.addTome(tomeService.getTomeById(tome_id));
-            userRepository.save(user);
-        }
-        catch(NoSuchElementException nseE){
-            throw new UserNotFoundException(user_id);
-        }
+    public void addTomeToLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException, TomeNotFoundException {
+        User user = this.getUserById(user_id);
+        user.addTome(tomeService.getTomeById(tome_id));
+        userRepository.save(user);
     }
 
     /**
@@ -131,17 +127,12 @@ public class UserService {
      * @return
      * @throws UserNotFoundException
      */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException{
-        try{
-            User user = this.getUserById(user_id);
-            Tome tome = tomeService.getTomeById(tome_id);
-            user.removeTome(tome);
-            userRepository.save(user);
-            return tome;
-        }
-        catch(NoSuchElementException nseE){
-            throw new UserNotFoundException(user_id);
-        }
+    public Tome deleteTomeFromUserLibrary(Integer user_id, Integer tome_id) throws UserNotFoundException, TomeNotFoundException{
+        User user = this.getUserById(user_id);
+        Tome tome = tomeService.getTomeById(tome_id);
+        user.removeTome(tome);
+        userRepository.save(user);
+        return tome;
     }
 
     /**
