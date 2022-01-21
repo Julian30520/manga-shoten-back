@@ -45,21 +45,8 @@ public class MangaController {
     }
 
     @GetMapping(value = "/title/{manga_name}")
-    public Manga getMangaByTitle(@PathVariable String manga_name) throws JsonProcessingException {
-        String url = "https://api.mangadex.org/manga?title=";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response
-                = restTemplate.getForEntity(url, String.class);
-
-        ObjectMapper mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Manga.class, new MangaDeserializer());
-        mapper.registerModule(module);
-
-        Manga manga = mapper.readValue(response.getBody(), Manga.class);
-
-        return manga;
-        //return mangaService.findByTitleEn(manga_name);
+    public List<MangaShort> getMangaByTitle(@PathVariable String manga_name) throws IOException {
+        return mangaService.getMangaByNameFromApi(manga_name);
     }
 
     @RequestMapping(
