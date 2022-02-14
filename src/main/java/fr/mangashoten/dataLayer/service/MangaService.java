@@ -46,8 +46,8 @@ public class MangaService {
         return mangaRepository.findByTitleEn(title).get();
     }
 
-    public List<MangaShort> getAllMangaFromApi(String limit) throws IOException {
-        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit;
+    public List<MangaShort> getAllMangaFromApi(String limit, String offset) throws IOException {
+        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit + "&offset=" + offset;
         return getMangaShorts(url);
     }
 

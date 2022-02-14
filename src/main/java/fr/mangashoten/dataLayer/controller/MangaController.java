@@ -22,9 +22,9 @@ public class MangaController {
     @Autowired
     private MangaService mangaService;
 
-    @GetMapping(value = "/all/{limit}")
-    public List<MangaShort> getAllManga(@PathVariable String limit) throws IOException {
-        return this.mangaService.getAllMangaFromApi(limit);
+    @GetMapping(value = "/all/{limit}/{offset}")
+    public List<MangaShort> getAllManga(@PathVariable String limit, @PathVariable String offset) throws IOException {
+        return this.mangaService.getAllMangaFromApi(limit, offset);
     }
 
     @GetMapping(value = "/{manga_id}")
