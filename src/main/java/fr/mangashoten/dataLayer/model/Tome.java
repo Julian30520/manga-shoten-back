@@ -16,7 +16,7 @@ public class Tome {
 
     @Id
     @Column(name = "id_tome")
-    private String tomeId;
+    private int tomeId;
 
     @Column(name = "number")
     private int tomeNumber;

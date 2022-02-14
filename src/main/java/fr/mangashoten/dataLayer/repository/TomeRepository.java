@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TomeRepository  extends CrudRepository<Tome, String> {
+public interface TomeRepository  extends CrudRepository<Tome, Integer> {
 
 }

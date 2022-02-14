@@ -1,13 +1,13 @@
 package fr.mangashoten.dataLayer.exception;
 
 public class TomeNotFoundException extends Exception {
-    private String _id;
+    private int _id;
 
     public TomeNotFoundException(){
         super();
-        this._id = "";
+        this._id = 0;
     }
-    public TomeNotFoundException(String id){
+    public TomeNotFoundException(int id){
         super();
         this._id = id;
     }
@@ -16,7 +16,7 @@ public class TomeNotFoundException extends Exception {
     public String getMessage(){
         StringBuilder strB = new StringBuilder();
         strB.append("Tome inconnu.");
-        if(this._id != ""){
+        if(this._id != 0){
             strB.append(" id : ");
             strB.append(this._id);
         }

@@ -38,7 +38,7 @@ class TomeServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Tome tomeToSend = new Tome();
-            tomeToSend.setTomeId(Integer.toString(index));
+            tomeToSend.setTomeId(index);
             tomeToSend.setTomeNumber(1);
             tomeToSend.setTomeNumber(20);
             tomeToSend.setCover("urlImage");
@@ -65,7 +65,7 @@ class TomeServiceTest {
     void get_tomeByIdTest() throws TomeNotFoundException {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId("1");
+        tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
@@ -86,7 +86,7 @@ class TomeServiceTest {
     void add_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId("1");
+        tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
@@ -105,7 +105,7 @@ class TomeServiceTest {
     void delete_tomeTest() {
         // GIVEN
         Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId("1");
+        tomeToSend.setTomeId(1);
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
@@ -120,6 +120,6 @@ class TomeServiceTest {
 
         // THEN
         assertEquals("1", genericTome.getTomeId());
-        assertEquals(Optional.empty(), tomeRepository.findById("1"));
+        assertEquals(Optional.empty(), tomeRepository.findById(1));
     }
 }
