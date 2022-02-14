@@ -25,8 +25,9 @@ public class Genre {
     @Column(name = "name")
     public String name;
 
-    public Genre(String name) {
+    public Genre(String name, String idType) {
         this.name = name;
+        this.idType = idType;
     }
 
 

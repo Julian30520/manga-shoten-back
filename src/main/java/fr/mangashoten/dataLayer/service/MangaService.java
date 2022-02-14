@@ -96,7 +96,7 @@ public class MangaService {
                             manga.setCover(elemNode.get("attributes").get("fileName").textValue());
                         }
                         if(elemNode.get("type").textValue().equals("author")) {
-                            manga.setAuthor(new Author(elemNode.get("attributes").get("name").textValue()));
+                            manga.setAuthor(new Author(elemNode.get("attributes").get("name").textValue(), elemNode.get("id").textValue()));
                         }
                     }
                 }
@@ -105,7 +105,7 @@ public class MangaService {
                 if(node.get("attributes").get("tags").asToken() == JsonToken.START_ARRAY) {
                     JsonNode tagsNode = node.get("attributes").get("tags");
                     for (JsonNode tag : tagsNode) {
-                        genreList.add(new Genre(tag.get("attributes").get("name").get("en").textValue()));
+                        genreList.add(new Genre(tag.get("attributes").get("name").get("en").textValue(), tag.get("id").textValue()));
                     }
                     manga.setGenres(genreList);
                 }

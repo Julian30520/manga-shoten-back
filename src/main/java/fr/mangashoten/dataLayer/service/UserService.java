@@ -114,7 +114,7 @@ public class UserService {
      * @param user_id
      * @param tome_id
      */
-    public void addTomeToLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException {
+    public void addTomeToLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
         User user = this.getUserById(user_id);
         user.addTome(tomeService.getTomeById(tome_id));
         userRepository.save(user);
@@ -127,7 +127,7 @@ public class UserService {
      * @return
      * @throws UserNotFoundException
      */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException{
+    public Tome deleteTomeFromUserLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException{
         User user = this.getUserById(user_id);
         Tome tome = tomeService.getTomeById(tome_id);
         user.removeTome(tome);
