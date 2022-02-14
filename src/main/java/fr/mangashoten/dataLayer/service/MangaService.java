@@ -55,8 +55,8 @@ public class MangaService {
         return mangaRepository.findByTitleEn(title).get();
     }
 
-    public List<MangaShort> getAllMangaFromApi(String limit) throws IOException {
-        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit;
+    public List<MangaShort> getAllMangaFromApi(String limit, String offset) throws IOException {
+        String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit + "&offset=" + offset;
         return getMangaShorts(url);
     }
 
@@ -105,7 +105,7 @@ public class MangaService {
                             manga.setCover(elemNode.get("attributes").get("fileName").textValue());
                         }
                         if(elemNode.get("type").textValue().equals("author")) {
-                            manga.setAuthor(new Author(elemNode.get("attributes").get("name").textValue()));
+                            manga.setAuthor(new Author(elemNode.get("attributes").get("name").textValue(), elemNode.get("id").textValue()));
                         }
                     }
                 }
@@ -114,7 +114,7 @@ public class MangaService {
                 if(node.get("attributes").get("tags").asToken() == JsonToken.START_ARRAY) {
                     JsonNode tagsNode = node.get("attributes").get("tags");
                     for (JsonNode tag : tagsNode) {
-                        genreList.add(new Genre(tag.get("attributes").get("name").get("en").textValue()));
+                        genreList.add(new Genre(tag.get("attributes").get("name").get("en").textValue(), tag.get("id").textValue()));
                     }
                     manga.setGenres(genreList);
                 }

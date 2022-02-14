@@ -1,9 +1,7 @@
 package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
-import fr.mangashoten.dataLayer.model.Author;
 import fr.mangashoten.dataLayer.model.Genre;
-import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.repository.GenreRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +34,7 @@ class GenreServiceTest {
 
         for (int index = 1; index <= 2; index++) {
             Genre genreToSend = new Genre();
-            genreToSend.setIdType(Integer.toString(index));
+            genreToSend.setIdGenre(Integer.toString(index));
             genreToSend.setName("TestGenreName" + index);
             genreToSend.setMangas(new ArrayList<>());
 
@@ -51,32 +48,32 @@ class GenreServiceTest {
         foundGenres.forEach(genre -> result.add(genre));
 
         // THEN
-        assertEquals(initGenres.get(0).getIdType(), result.get(0).getIdType());
-        assertEquals(initGenres.get(1).getIdType(), result.get(1).getIdType());
+        assertEquals(initGenres.get(0).getIdGenre(), result.get(0).getIdGenre());
+        assertEquals(initGenres.get(1).getIdGenre(), result.get(1).getIdGenre());
     }
 
     @Test
     void get_GenreByIdTest() {
         // GIVEN
         Genre genreToSend = new Genre();
-        genreToSend.setIdType("1");
+        genreToSend.setIdGenre("1");
         genreToSend.setName("TestGenreName");
         genreToSend.setMangas(new ArrayList<>());
 
         Genre genericGenre = genreRepository.save(genreToSend);
 
         // WHEN
-        Genre foundGenre = genreService.getGenreById(genericGenre.getIdType());
+        Genre foundGenre = genreService.getGenreById(genericGenre.getIdGenre());
 
         // THEN
-        assertEquals(genericGenre.getIdType(), foundGenre.getIdType());
+        assertEquals(genericGenre.getIdGenre(), foundGenre.getIdGenre());
     }
 
     @Test
     void add_GenreTest() {
         // GIVEN
         Genre genreToSend = new Genre();
-        genreToSend.setIdType("1");
+        genreToSend.setIdGenre("1");
         genreToSend.setName("TestGenreName");
         genreToSend.setMangas(new ArrayList<>());
 
@@ -84,23 +81,23 @@ class GenreServiceTest {
         Genre genericGenre = genreService.addGenre(genreToSend);
 
         // THEN
-        assertEquals(genreToSend.getIdType(), genericGenre.getIdType());
+        assertEquals(genreToSend.getIdGenre(), genericGenre.getIdGenre());
     }
 
     @Test
     void delete_ByGenreTest() {
         Genre genreToSend = new Genre();
-        genreToSend.setIdType("1");
+        genreToSend.setIdGenre("1");
         genreToSend.setName("TestGenreName");
         genreToSend.setMangas(new ArrayList<>());
 
         Genre genericGenre = genreRepository.save(genreToSend);
 
         // WHEN
-        genreService.deleteByGenre(genericGenre.getIdType());
+        genreService.deleteByGenre(genericGenre.getIdGenre());
 
         // THEN
-        assertEquals("1", genericGenre.getIdType());
+        assertEquals("1", genericGenre.getIdGenre());
         assertEquals(Optional.empty(), genreRepository.findById("1"));
     }
 }

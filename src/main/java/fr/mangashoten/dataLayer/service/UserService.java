@@ -1,13 +1,13 @@
 package fr.mangashoten.dataLayer.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import fr.mangashoten.dataLayer.dto.Mapper;
 import fr.mangashoten.dataLayer.dto.UserDto;
-import fr.mangashoten.dataLayer.exception.*;
-import fr.mangashoten.dataLayer.model.Manga;
+import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
+import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
+import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
+import fr.mangashoten.dataLayer.exception.UserNotFoundException;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
-import fr.mangashoten.dataLayer.repository.MangaRepository;
 import fr.mangashoten.dataLayer.repository.UserRepository;
 import fr.mangashoten.dataLayer.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,6 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    MangaService mangaService;
-    @Autowired
     TomeService tomeService;
 
     @Autowired
@@ -37,7 +35,7 @@ public class UserService {
 
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;    // permet la fourniture du Jeton (Token)
+    private JwtTokenProvider jwtTokenProvider;	// permet la fourniture du Jeton (Token)
 
     @Autowired
     private AuthenticationManager authenticationManager; // gestionnaire d'authentification
@@ -48,7 +46,6 @@ public class UserService {
 
     /**
      * Va chercher la liste de utilisateurs
-     *
      * @return
      */
     public ArrayList<User> getUsers() {
@@ -61,37 +58,36 @@ public class UserService {
 
     /**
      * Va chercher un utilisateur à partir de son nom
-     *
      * @param username
      * @return
      */
     public User getUserByUsername(String username) throws UserNotFoundException {
         var optUser = userRepository.findByUsername(username);
-        try {
+        try{
             return optUser.get();
-        } catch (NoSuchElementException ex) {
+        }
+        catch(NoSuchElementException ex){
             throw new UserNotFoundException(username);
         }
     }
 
     /**
      * Récupère un utilisateur à partir de son Id dans la base
-     *
      * @param id
      * @return
      */
     public User getUserById(Integer id) throws UserNotFoundException {
         var optUser = userRepository.findById(id);
-        try {
+        try{
             return optUser.get();
-        } catch (NoSuchElementException ex) {
+        }
+        catch(NoSuchElementException ex){
             throw new UserNotFoundException(id);
         }
     }
 
     /**
      * Supprime un utilisateur de la base
-     *
      * @param user
      */
     public User deleteUser(User user) {
@@ -101,21 +97,20 @@ public class UserService {
 
     /**
      * Récupère la liste des tomes possédés par un utilisateur
-     *
      * @param user l'utilisateur dont on veut la liste des tomes
      * @return Une liste de tomes
      */
     public ArrayList<Tome> getTomes(User user) throws UserNotFoundException {
         try {
             return new ArrayList<Tome>(user.getTomes());
-        } catch (NoSuchElementException nseE) {
+        }
+        catch(NoSuchElementException nseE){
             throw new UserNotFoundException(user.getUserId());
         }
     }
 
     /**
      * Ajoute un tome dans la librairie d'un utilisateur
-     *
      * @param user_id
      * @param tome_id
      */
@@ -127,13 +122,12 @@ public class UserService {
 
     /**
      * Retire un tome de la bibliothèque de l'utilisateur
-     *
      * @param user_id
      * @param tome_id
      * @return
      * @throws UserNotFoundException
      */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException {
+    public Tome deleteTomeFromUserLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException{
         User user = this.getUserById(user_id);
         Tome tome = tomeService.getTomeById(tome_id);
         user.removeTome(tome);
@@ -143,7 +137,6 @@ public class UserService {
 
     /**
      * Met à jour l'utilisateur dans la base de données
-     *
      * @param user
      */
     public void updateUser(User user) throws UserNotFoundException {
@@ -160,24 +153,20 @@ public class UserService {
 
         ArrayList<Method> getMethods = new ArrayList<>();
         ArrayList<Method> setMethods = new ArrayList<>();
-        for (Method method : updatedPartialUser.getClass().getDeclaredMethods()) {
-            if (method.getName().startsWith("get")) {
+        for (Method method : updatedPartialUser.getClass().getDeclaredMethods()){
+            if(method.getName().startsWith("get")){
                 getMethods.add(method);
             }
-            if (method.getName().startsWith("set")) {
+            if(method.getName().startsWith("set")){
                 setMethods.add(method);
             }
         }
-        getMethods.sort((a, b) -> {
-            return a.getName().compareToIgnoreCase(b.getName());
-        });
-        setMethods.sort((a, b) -> {
-            return a.getName().compareToIgnoreCase(b.getName());
-        });
-        for (int i = 0; i < getMethods.size(); i++) {
+        getMethods.sort((a, b) -> {return a.getName().compareToIgnoreCase(b.getName());});
+        setMethods.sort((a, b) -> {return a.getName().compareToIgnoreCase(b.getName());});
+        for(int i = 0; i < getMethods.size(); i++){
             Object dtoInfo = getMethods.get(i).invoke(updatedPartialUser);
             Object fullUserInfo = getMethods.get(i).invoke(fullUserDto);
-            if (dtoInfo != null && !dtoInfo.equals(fullUserInfo)) {
+            if(dtoInfo != null && !dtoInfo.equals(fullUserInfo)){
                 setMethods.get(i).invoke(fullUserDto, dtoInfo);
             }
         }
@@ -206,28 +195,6 @@ public class UserService {
             return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
         } else {
             throw new ExistingUsernameOrMailException();
-        }
-    }
-
-    /**
-     * Ajoute les tomes d'un manga dans la bibliothèque de l'utilisateur
-     * @param user
-     * @param mangaId
-     * @throws UserNotFoundException
-     * @throws TomeNotFoundException
-     */
-    public void addMangaToLibrary(User user, String mangaId) throws UserNotFoundException, TomeNotFoundException, JsonProcessingException, MangaNotFoundException {
-        if (mangaService.exists(mangaId)) {
-            Manga manga = mangaService.getMangaById(mangaId);
-            for (Tome tome :
-                    manga.getTomes()) {
-                this.addTomeToLibrary(user.getUserId(), tome.getTomeId());
-            }
-        }
-        else{
-            Manga manga = mangaService.getMangaByIdFromApi(mangaId);
-            mangaService.addManga(manga);
-            this.addMangaToLibrary(user, manga.getMangaId());
         }
     }
 
