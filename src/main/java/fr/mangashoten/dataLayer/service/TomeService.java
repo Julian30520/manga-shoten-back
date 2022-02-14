@@ -1,6 +1,9 @@
 package fr.mangashoten.dataLayer.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import fr.mangashoten.dataLayer.exception.MangaNotFoundException;
 import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
+import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.TomeRepository;
@@ -16,6 +19,8 @@ public class TomeService {
 
     @Autowired
     private TomeRepository tomeRepository;
+    @Autowired
+    private MangaService mangaService;
 
     public ArrayList<Tome> getTomes() {
         Iterable<Tome> iteTomes = tomeRepository.findAll();
@@ -32,6 +37,17 @@ public class TomeService {
         }catch(NoSuchElementException ex){
             throw new TomeNotFoundException(tomeId);
         }
+    }
+
+    /**
+     * Récupère un tome spécifique du manga donné
+     * @param mangaId L'id du manga dont on veut le tome spécifique
+     * @param numero Le numéro du tome voulu dans le manga
+     * @return
+     */
+    public Tome getTomeByMangaIdAndNumber(String mangaId, int numero) throws MangaNotFoundException, JsonProcessingException {
+        Manga manga = mangaService.getMangaById(mangaId);
+        return tomeRepository.getByMangaAndTomeNumber(manga, numero);
     }
 
     public Tome addTome(Tome tome) {

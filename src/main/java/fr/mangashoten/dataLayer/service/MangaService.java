@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import fr.mangashoten.dataLayer.exception.MangaNotFoundException;
 import fr.mangashoten.dataLayer.model.*;
 import fr.mangashoten.dataLayer.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -30,12 +32,19 @@ public class MangaService {
         return arrayListManga;
     }
 
-    public Manga getMangaById(String mangaId) {
-        return mangaRepository.findById(mangaId).get();
+    public Manga getMangaById(String mangaId) throws JsonProcessingException, MangaNotFoundException {
+        //Si le manga n'existe pas, on l'ajoute dans la base depuis MangaDex
+        this.extract(mangaId);
+
+        Optional<Manga> manga = mangaRepository.findById(mangaId);
+        if(manga.isPresent()) return manga.get();
+        else throw new MangaNotFoundException(mangaId);
     }
 
     public Manga addManga(Manga manga) {
-        return  mangaRepository.save(manga);
+        if(!mangaRepository.existsByMangaId(manga.getMangaId()))
+            return  mangaRepository.save(manga);
+        else return manga;
     }
 
     public void deleteMangaById(String mangaId) {
@@ -196,5 +205,17 @@ public class MangaService {
         }
 
         return mangaList;
+    }
+
+    public Boolean exists(String mangaId){
+        return mangaRepository.existsByMangaId(mangaId);
+    }
+
+    /**
+     * Vérifie l'existence d'un manga dans la base. Si il n'existe pas, va le chercher sur MangaDex et l'ajoute
+     * @param mangaId
+     */
+    private void extract(String mangaId) throws JsonProcessingException {
+        if(!this.exists(mangaId)) this.addManga(this.getMangaByIdFromApi(mangaId));
     }
 }

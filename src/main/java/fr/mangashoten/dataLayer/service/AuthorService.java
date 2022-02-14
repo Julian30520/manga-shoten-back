@@ -43,4 +43,5 @@ public class AuthorService {
         return manga.getAuthor().getName();
     }
 
+
 }

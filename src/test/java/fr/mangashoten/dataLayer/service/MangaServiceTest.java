@@ -1,6 +1,8 @@
 package fr.mangashoten.dataLayer.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fr.mangashoten.dataLayer.DataLayerApplication;
+import fr.mangashoten.dataLayer.exception.MangaNotFoundException;
 import fr.mangashoten.dataLayer.model.*;
 import fr.mangashoten.dataLayer.repository.MangaRepository;
 import org.junit.jupiter.api.Test;
@@ -57,7 +59,7 @@ class MangaServiceTest {
     }
 
     @Test
-    void get_MangaByIdTest() {
+    void get_MangaByIdTest() throws MangaNotFoundException, JsonProcessingException {
         // GIVEN
         Manga mangaToSend = new Manga();
         mangaToSend.setMangaId("1");
