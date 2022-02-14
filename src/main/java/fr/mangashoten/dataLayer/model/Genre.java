@@ -1,6 +1,5 @@
 package fr.mangashoten.dataLayer.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,15 +18,15 @@ import java.util.List;
 public class Genre {
 
     @Id
-    @Column(name = "id_type")
-    public String idType;
+    @Column(name = "id_genre")
+    public String idGenre;
 
     @Column(name = "name")
     public String name;
 
-    public Genre(String name, String idType) {
+    public Genre(String name, String idGenre) {
         this.name = name;
-        this.idType = idType;
+        this.idGenre = idGenre;
     }
 
 
