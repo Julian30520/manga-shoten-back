@@ -31,12 +31,8 @@ public class Genre {
 
 
     @ManyToMany(
+            mappedBy = "mangaGenre",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
-    )
-    @JoinTable(
-            name = "genre_manga",
-            joinColumns = @JoinColumn(name = "id_genre"),
-            inverseJoinColumns = @JoinColumn(name = "id_manga")
     )
     private List<Manga> mangas = new ArrayList<>();
 

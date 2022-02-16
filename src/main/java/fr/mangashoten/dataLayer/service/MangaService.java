@@ -116,7 +116,7 @@ public class MangaService {
                     for (JsonNode tag : tagsNode) {
                         genreList.add(new Genre(tag.get("attributes").get("name").get("en").textValue(), tag.get("id").textValue()));
                     }
-                    manga.setGenres(genreList);
+                    manga.setMangaGenre(genreList);
                 }
 
                 List<Tome> mangaListTome = new ArrayList<>();
