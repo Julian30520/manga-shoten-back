@@ -32,9 +32,9 @@ public class MangaService {
         return arrayListManga;
     }
 
-    public Manga getMangaById(String mangaId) throws JsonProcessingException, MangaNotFoundException {
+    public Manga getMangaById(String mangaId) throws MangaNotFoundException {
         //Si le manga n'existe pas, on l'ajoute dans la base depuis MangaDex
-        this.extract(mangaId);
+//        this.extract(mangaId);
 
         Optional<Manga> manga = mangaRepository.findById(mangaId);
         if(manga.isPresent()) return manga.get();
@@ -215,7 +215,12 @@ public class MangaService {
      * Vérifie l'existence d'un manga dans la base. Si il n'existe pas, va le chercher sur MangaDex et l'ajoute
      * @param mangaId
      */
-    private void extract(String mangaId) throws JsonProcessingException {
-        if(!this.exists(mangaId)) this.addManga(this.getMangaByIdFromApi(mangaId));
+    public Manga extract(String mangaId) throws JsonProcessingException, MangaNotFoundException {
+        if(!this.exists(mangaId)) {
+            Manga mangaToAdd = this.getMangaByIdFromApi(mangaId);
+            mangaToAdd.getTomes().forEach(tome->tome.setManga(mangaToAdd));
+            return this.addManga(mangaToAdd);
+        }
+        else return this.getMangaById(mangaId);
     }
 }

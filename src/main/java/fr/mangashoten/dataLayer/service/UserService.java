@@ -1,11 +1,10 @@
 package fr.mangashoten.dataLayer.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fr.mangashoten.dataLayer.dto.Mapper;
 import fr.mangashoten.dataLayer.dto.UserDto;
-import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
-import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
-import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
-import fr.mangashoten.dataLayer.exception.UserNotFoundException;
+import fr.mangashoten.dataLayer.exception.*;
+import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
@@ -29,6 +28,8 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     TomeService tomeService;
+    @Autowired
+    MangaService mangaService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder; // permet l'encodage du mot de passe
@@ -114,7 +115,7 @@ public class UserService {
      * @param user_id
      * @param tome_id
      */
-    public void addTomeToLibrary(Integer user_id, String tome_id) throws UserNotFoundException, TomeNotFoundException {
+    public void addTomeToLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
         User user = this.getUserById(user_id);
         user.addTome(tomeService.getTomeById(tome_id));
         userRepository.save(user);
@@ -196,6 +197,25 @@ public class UserService {
         } else {
             throw new ExistingUsernameOrMailException();
         }
+    }
+
+    /**
+     * Ajoute la liste des tmes d'u nmanga à la librairie de l'utilisateur
+     * @param userId L'id de l'utilisateur
+     * @param mangaId L'id du manga
+     * @throws JsonProcessingException
+     * @throws UserNotFoundException Se déclenche si l'utilisateur n'est pas dans la base
+     * @throws TomeNotFoundException Se déclenche si le tome à ajouter n'est pas présent dans la base.
+     * @throws MangaNotFoundException Dans le cas ou le manga à ajouter n'est pas présent dans la base (ce qui est théoriquement impossible)
+     */
+    public void addMangaToLibrary(int userId, String mangaId) throws JsonProcessingException, UserNotFoundException, TomeNotFoundException, MangaNotFoundException {
+        Manga manga = this.mangaService.extract(mangaId);
+        User user = this.getUserById(userId);
+
+        for (Tome tome : manga.getTomes()) {
+            this.addTomeToLibrary(user.getUserId(), tome.getTomeId());
+        }
+
     }
 
 }

@@ -6,8 +6,10 @@ import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
 import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
 import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
+import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
+import fr.mangashoten.dataLayer.service.MangaService;
 import fr.mangashoten.dataLayer.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -219,7 +221,7 @@ public class UserController {
     @PostMapping("/manga/add/{userId}/{mangaId}")
     public ResponseEntity<Manga> addMangaToLibrary(@PathVariable int userId, @PathVariable String mangaId){
         try{
-            this.userService.addMangaToLibrary(userService.getUserById(userId), mangaId);
+            this.userService.addMangaToLibrary(userService.getUserById(userId).getUserId(), mangaId);
             return ResponseEntity.ok(mangaService.getMangaById(mangaId));
         }
         catch(UserNotFoundException e){

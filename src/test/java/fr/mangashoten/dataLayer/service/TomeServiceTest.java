@@ -2,11 +2,9 @@ package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
 import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
-import fr.mangashoten.dataLayer.model.Editor;
 import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.repository.TomeRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +39,6 @@ class TomeServiceTest {
             tomeToSend.setTomeNumber(1);
             tomeToSend.setTomeNumber(20);
             tomeToSend.setCover("urlImage");
-            tomeToSend.setEditor(new Editor(Integer.toString(index)));
             tomeToSend.setManga(new Manga(Integer.toString(index)));
             //tomeToSend.setUsers(new ArrayList<>());
 
@@ -69,7 +65,6 @@ class TomeServiceTest {
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor("1"));
         tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 
@@ -90,7 +85,6 @@ class TomeServiceTest {
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor("1"));
         tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 
@@ -109,7 +103,6 @@ class TomeServiceTest {
         tomeToSend.setTomeNumber(1);
         tomeToSend.setTomeNumber(20);
         tomeToSend.setCover("urlImage");
-        tomeToSend.setEditor(new Editor("1"));
         tomeToSend.setManga(new Manga("1"));
 //        tomeToSend.setUsers(new ArrayList<>());
 

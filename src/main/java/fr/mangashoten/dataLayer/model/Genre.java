@@ -35,7 +35,7 @@ public class Genre {
     )
     @JoinTable(
             name = "genre_manga",
-            joinColumns = @JoinColumn(name = "id_type"),
+            joinColumns = @JoinColumn(name = "id_genre"),
             inverseJoinColumns = @JoinColumn(name = "id_manga")
     )
     private List<Manga> mangas = new ArrayList<>();

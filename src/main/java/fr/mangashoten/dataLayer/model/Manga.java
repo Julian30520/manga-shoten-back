@@ -50,9 +50,9 @@ public class Manga {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            mappedBy = "manga"
     )
-    @JoinColumn(name = "id_tome")
     @JsonManagedReference(value = "manga_tome")
     private List<Tome> tomes = new ArrayList<>();
 

@@ -16,6 +16,7 @@ public class Tome {
 
     @Id
     @Column(name = "id_tome")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tomeId;
 
     @Column(name = "number")
@@ -27,19 +28,6 @@ public class Tome {
     @Column(name = "cover")
     private String cover;
 
-//    @ManyToMany(
-//            mappedBy = "tomes",
-//            cascade = CascadeType.ALL)
-//    private List<User> users = new ArrayList<>();
-
-    @ManyToOne(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinColumn(name = "id_editor")
-    @JsonBackReference(value="editor_reference")
-    private Editor editor;
 
     @ManyToOne(
             cascade = {

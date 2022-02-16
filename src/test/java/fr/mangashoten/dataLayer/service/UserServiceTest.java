@@ -2,9 +2,7 @@ package fr.mangashoten.dataLayer.service;
 
 import fr.mangashoten.dataLayer.DataLayerApplication;
 import fr.mangashoten.dataLayer.exception.UserNotFoundException;
-import fr.mangashoten.dataLayer.model.Editor;
 import fr.mangashoten.dataLayer.model.Role;
-import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
 import org.junit.jupiter.api.Test;
