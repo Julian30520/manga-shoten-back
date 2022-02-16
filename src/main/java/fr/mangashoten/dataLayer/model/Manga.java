@@ -67,11 +67,15 @@ public class Manga {
 
 
     @ManyToMany(
-            mappedBy = "mangas",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
-    @JsonIgnoreProperties("mangas")
-    private List<Genre> genres = new ArrayList<>();
+    @JoinTable(
+            name = "genre_manga",
+            joinColumns = @JoinColumn(name = "id_manga"),
+            inverseJoinColumns = @JoinColumn(name = "id_genre")
+    )
+    @JsonIgnoreProperties("mangaGenre")
+    private List<Genre> mangaGenre = new ArrayList<>();
 
 
 }
