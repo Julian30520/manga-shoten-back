@@ -30,8 +30,12 @@ public class MangaController {
 
     private static final Logger log = LoggerFactory.getLogger(MangaController.class);
 
-    @GetMapping(value = "/all/{limit}/{offset}")
-    public List<MangaShort> getAllManga(@PathVariable String limit, @PathVariable String offset) throws IOException {
+    @GetMapping(value = "/all")
+    public List<MangaShort> getAllManga(
+            @RequestParam(defaultValue = "30") String limit,
+            @RequestParam(defaultValue = "0") String offset
+            )
+            throws IOException {
         return this.mangaService.getAllMangaFromApi(limit, offset);
     }
 
