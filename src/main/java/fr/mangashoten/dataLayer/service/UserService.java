@@ -36,7 +36,7 @@ public class UserService {
 
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;	// permet la fourniture du Jeton (Token)
+    private JwtTokenProvider jwtTokenProvider;    // permet la fourniture du Jeton (Token)
 
     @Autowired
     private AuthenticationManager authenticationManager; // gestionnaire d'authentification
@@ -47,6 +47,7 @@ public class UserService {
 
     /**
      * Va chercher la liste de utilisateurs
+     *
      * @return
      */
     public ArrayList<User> getUsers() {
@@ -59,36 +60,37 @@ public class UserService {
 
     /**
      * Va chercher un utilisateur à partir de son nom
+     *
      * @param username
      * @return
      */
     public User getUserByUsername(String username) throws UserNotFoundException {
         var optUser = userRepository.findByUsername(username);
-        try{
+        try {
             return optUser.get();
-        }
-        catch(NoSuchElementException ex){
+        } catch (NoSuchElementException ex) {
             throw new UserNotFoundException(username);
         }
     }
 
     /**
      * Récupère un utilisateur à partir de son Id dans la base
+     *
      * @param id
      * @return
      */
     public User getUserById(Integer id) throws UserNotFoundException {
         var optUser = userRepository.findById(id);
-        try{
+        try {
             return optUser.get();
-        }
-        catch(NoSuchElementException ex){
+        } catch (NoSuchElementException ex) {
             throw new UserNotFoundException(id);
         }
     }
 
     /**
      * Supprime un utilisateur de la base
+     *
      * @param user
      */
     public User deleteUser(User user) {
@@ -98,46 +100,54 @@ public class UserService {
 
     /**
      * Récupère la liste des tomes possédés par un utilisateur
+     *
      * @param user l'utilisateur dont on veut la liste des tomes
      * @return Une liste de tomes
      */
     public ArrayList<Tome> getTomes(User user) throws UserNotFoundException {
         try {
             return new ArrayList<Tome>(user.getTomes());
-        }
-        catch(NoSuchElementException nseE){
+        } catch (NoSuchElementException nseE) {
             throw new UserNotFoundException(user.getUserId());
         }
     }
 
     /**
      * Ajoute un tome dans la librairie d'un utilisateur
+     *
      * @param user_id
      * @param tome_id
      */
     public void addTomeToLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
         User user = this.getUserById(user_id);
-        user.addTome(tomeService.getTomeById(tome_id));
-        userRepository.save(user);
+        Tome tome = tomeService.getTomeById(tome_id);
+        if (!this.hasTome(user, tome)) { //on n'ajoute le tome que s'il n'est pas déjà présent dans la bibliothèque
+            user.addTome(tome);
+            userRepository.save(user);
+        }
     }
 
     /**
      * Retire un tome de la bibliothèque de l'utilisateur
+     *
      * @param user_id
      * @param tome_id
      * @return
      * @throws UserNotFoundException
      */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException{
+    public Tome deleteTomeFromUserLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
         User user = this.getUserById(user_id);
         Tome tome = tomeService.getTomeById(tome_id);
-        user.removeTome(tome);
-        userRepository.save(user);
+        if(this.hasTome(user, tome)){
+            user.removeTome(tome);
+            userRepository.save(user);
+        }
         return tome;
     }
 
     /**
      * Met à jour l'utilisateur dans la base de données
+     *
      * @param user
      */
     public void updateUser(User user) throws UserNotFoundException {
@@ -154,20 +164,24 @@ public class UserService {
 
         ArrayList<Method> getMethods = new ArrayList<>();
         ArrayList<Method> setMethods = new ArrayList<>();
-        for (Method method : updatedPartialUser.getClass().getDeclaredMethods()){
-            if(method.getName().startsWith("get")){
+        for (Method method : updatedPartialUser.getClass().getDeclaredMethods()) {
+            if (method.getName().startsWith("get")) {
                 getMethods.add(method);
             }
-            if(method.getName().startsWith("set")){
+            if (method.getName().startsWith("set")) {
                 setMethods.add(method);
             }
         }
-        getMethods.sort((a, b) -> {return a.getName().compareToIgnoreCase(b.getName());});
-        setMethods.sort((a, b) -> {return a.getName().compareToIgnoreCase(b.getName());});
-        for(int i = 0; i < getMethods.size(); i++){
+        getMethods.sort((a, b) -> {
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
+        setMethods.sort((a, b) -> {
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
+        for (int i = 0; i < getMethods.size(); i++) {
             Object dtoInfo = getMethods.get(i).invoke(updatedPartialUser);
             Object fullUserInfo = getMethods.get(i).invoke(fullUserDto);
-            if(dtoInfo != null && !dtoInfo.equals(fullUserInfo)){
+            if (dtoInfo != null && !dtoInfo.equals(fullUserInfo)) {
                 setMethods.get(i).invoke(fullUserDto, dtoInfo);
             }
         }
@@ -201,21 +215,38 @@ public class UserService {
 
     /**
      * Ajoute la liste des tmes d'u nmanga à la librairie de l'utilisateur
-     * @param userId L'id de l'utilisateur
+     *
+     * @param userId  L'id de l'utilisateur
      * @param mangaId L'id du manga
      * @throws JsonProcessingException
-     * @throws UserNotFoundException Se déclenche si l'utilisateur n'est pas dans la base
-     * @throws TomeNotFoundException Se déclenche si le tome à ajouter n'est pas présent dans la base.
-     * @throws MangaNotFoundException Dans le cas ou le manga à ajouter n'est pas présent dans la base (ce qui est théoriquement impossible)
+     * @throws UserNotFoundException   Se déclenche si l'utilisateur n'est pas dans la base
+     * @throws TomeNotFoundException   Se déclenche si le tome à ajouter n'est pas présent dans la base.
+     * @throws MangaNotFoundException  Dans le cas ou le manga à ajouter n'est pas présent dans la base (ce qui est théoriquement impossible)
      */
     public void addMangaToLibrary(int userId, String mangaId) throws JsonProcessingException, UserNotFoundException, TomeNotFoundException, MangaNotFoundException {
         Manga manga = this.mangaService.extract(mangaId);
         User user = this.getUserById(userId);
 
         for (Tome tome : manga.getTomes()) {
-            this.addTomeToLibrary(user.getUserId(), tome.getTomeId());
+            if (!this.hasTome(user, tome)) {
+                user.addTome(tome);
+            }
         }
+        userRepository.save(user);
+    }
 
+    /**
+     * Détermine si le tome est deja présent dans la bibliothèque de l'utilisateur
+     *
+     * @param user
+     * @param tome
+     * @return
+     */
+    private Boolean hasTome(User user, Tome tome) {
+        for (Tome tomeUser : user.getTomes()) {
+            if (tomeUser.getTomeId() == tome.getTomeId()) return true;
+        }
+        return false;
     }
 
 }

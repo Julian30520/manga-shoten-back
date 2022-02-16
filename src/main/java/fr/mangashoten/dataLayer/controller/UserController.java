@@ -119,7 +119,6 @@ public class UserController {
     @PatchMapping(value="/{user_id}/{tome_id}")
     @PutMapping(value="/{user_id}/{tome_id}")
     public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable int tome_id) {
-        //TODO: Ajouter le tome dans la base de données à partir de MangaDex si il n'est pas encore présent dans notre base à nous.
 
         try{
             userService.addTomeToLibrary(user_id, tome_id);
