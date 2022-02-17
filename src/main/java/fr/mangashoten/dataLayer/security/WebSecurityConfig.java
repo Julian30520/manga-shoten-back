@@ -54,25 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/all").hasAuthority("ROLE_ADMIN") // que pour le rôle admin
                 // on désactive le reste...
                 .anyRequest().authenticated();
-
-
-//        http.csrf().disable()
-//    	.sessionManagement()
-//    	// Les sessions sont sans états et non créés ni utilisées par Spring security
-//    	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//    	.and()
-//    	// nos endpoints (points d'entrée de notre API)
-//    	.authorizeRequests()
-//    	.anyRequest().authenticated()
-//    	.antMatchers("/api/user/sign-in").permitAll()
-//    	.antMatchers("/api/user/sign-up").permitAll();
-
-
-
-
-
-
-
         // Appliquer JWT
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
