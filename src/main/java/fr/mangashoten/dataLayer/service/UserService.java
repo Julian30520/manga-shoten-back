@@ -114,7 +114,7 @@ public class UserService {
 
     /**
      * Ajoute un tome dans la librairie d'un utilisateur
-     *
+     * Cette méthode n'ajoute que des tomes qui sont deja extraits.
      * @param user_id
      * @param tome_id
      */
@@ -224,7 +224,7 @@ public class UserService {
      * @throws MangaNotFoundException  Dans le cas ou le manga à ajouter n'est pas présent dans la base (ce qui est théoriquement impossible)
      */
     public void addMangaToLibrary(int userId, String mangaId) throws JsonProcessingException, UserNotFoundException, TomeNotFoundException, MangaNotFoundException {
-        Manga manga = this.mangaService.extract(mangaId);
+        Manga manga = this.mangaService.getMangaById(mangaId);
         User user = this.getUserById(userId);
 
         for (Tome tome : manga.getTomes()) {

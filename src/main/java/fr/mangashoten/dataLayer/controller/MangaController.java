@@ -49,65 +49,8 @@ public class MangaController {
         return mangaService.getMangaByNameFromApi(manga_name);
     }
 
-    @GetMapping(value="/{mangaId}/tome/{tomeNumber}")
-    public ResponseEntity<Tome> getTomeByNumber(@PathVariable String mangaId, @PathVariable int tomeNumber){
-        try{
-            Tome tome = tomeService.getTomeByMangaIdAndNumber(mangaId, tomeNumber);
-            return ResponseEntity.ok(tome);
-        }
-        catch(MangaNotFoundException e){
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        catch(Exception e){
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
 
-    }
 
-//    @RequestMapping(
-//            value = "/add",
-//            method = RequestMethod.POST,
-//            produces = "application/json"
-//    )
-//    public ResponseEntity<String> createManga(@RequestBody Manga newManga) throws ServerException {
-//        final HttpHeaders httpHeaders= new HttpHeaders();
-//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-//
-//        Manga manga = mangaService.addManga(newManga);
-//        if (manga == null) {
-//            throw new ServerException("manga value null");
-//        } else {
-//            return new ResponseEntity<String>("{\"test\": \"Manga created !\"}", httpHeaders, HttpStatus.OK);
-//        }
-//    }
-
-//    @RequestMapping(
-//            value = "/add/{mangaId}",
-//            method = RequestMethod.POST,
-//            produces = "application/json"
-//    )
-//    public ResponseEntity<String> createManga(@RequestParam String mangaId)  {
-//        final HttpHeaders httpHeaders= new HttpHeaders();
-//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-//
-//        try{
-//            Manga newManga = mangaService.getMangaByIdFromApi(mangaId);
-//
-//            Manga manga = mangaService.addManga(newManga);
-//            if (manga == null) {
-//                throw new ServerException("manga value null");
-//            } else {
-//                return new ResponseEntity<String>("{\"test\": \"Manga created !\"}", httpHeaders, HttpStatus.OK);
-//            }
-//        }
-//        catch(Exception e){
-//            log.error(e.getMessage());
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//    }
 
     @DeleteMapping(value = "/delete/{manga_id}")
     public ResponseEntity<String> deleteMangaById(@PathVariable String manga_id) {

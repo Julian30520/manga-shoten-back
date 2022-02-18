@@ -2,14 +2,12 @@ package fr.mangashoten.dataLayer.controller;
 
 import fr.mangashoten.dataLayer.dto.JsonWebToken;
 import fr.mangashoten.dataLayer.dto.UserDto;
-import fr.mangashoten.dataLayer.exception.ExistingUsernameOrMailException;
-import fr.mangashoten.dataLayer.exception.InvalidCredentialsException;
-import fr.mangashoten.dataLayer.exception.TomeNotFoundException;
-import fr.mangashoten.dataLayer.exception.UserNotFoundException;
+import fr.mangashoten.dataLayer.exception.*;
 import fr.mangashoten.dataLayer.model.Manga;
 import fr.mangashoten.dataLayer.model.Tome;
 import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.service.MangaService;
+import fr.mangashoten.dataLayer.service.TomeService;
 import fr.mangashoten.dataLayer.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +32,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private MangaService mangaService;
+    @Autowired
+    private TomeService tomeService;
 
     private Mapper mapper = new Mapper();
 
@@ -116,41 +116,6 @@ public class UserController {
         }
     }
 
-    @PatchMapping(value="/{user_id}/{tome_id}")
-    @PutMapping(value="/{user_id}/{tome_id}")
-    public ResponseEntity addTomeToUserLibrary(@PathVariable Integer user_id, @PathVariable int tome_id) {
-
-        try{
-            userService.addTomeToLibrary(user_id, tome_id);
-            log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.ok().build();
-        }
-        catch(UserNotFoundException | TomeNotFoundException unfEx){
-            log.error(unfEx.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        catch(Exception e){
-            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping(value="/{user_id}/{tome_id}")
-    public ResponseEntity deleteTomeFromUserLibrary(@PathVariable Integer user_id, @PathVariable int tome_id){
-        try{
-            userService.deleteTomeFromUserLibrary(user_id, tome_id);
-            log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.ok().build();
-        }
-        catch(UserNotFoundException | TomeNotFoundException e){
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        catch(Exception e){
-            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.badRequest().build();
-        }
-    }
 
     /**
      * Resources permettant la mise à jours des information d'un utilisateur
@@ -217,6 +182,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Ajoute un manga dans la bibliothèque d'un utilisateur
+     * @param userId
+     * @param mangaId
+     * @return
+     */
     @PostMapping("/manga/add/{userId}/{mangaId}")
     public ResponseEntity<Manga> addMangaToLibrary(@PathVariable int userId, @PathVariable String mangaId){
         try{
@@ -229,6 +200,33 @@ public class UserController {
         }
         catch(Exception e){
             log.error("Une erreur est survenue lors de l'ajout du manga {} à la bibliothèque de l'utilisateur {}", mangaId, userId);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+
+    /**
+     * Ajoute un tome à la librairie d'un utilisateur
+     * @param tomeNumber
+     * @param mangaId
+     * @param userId
+     * @return
+     */
+    @PostMapping(value="/tome/add/{userId}/{tomeNumber}/manga/{mangaId}")
+    public ResponseEntity<Tome> addTomeToUserLibraryFromTomeNumberInManga(@PathVariable int tomeNumber, @PathVariable String mangaId, @PathVariable int userId) {
+        try{
+            Tome tomeToAdd = tomeService.getTomeByMangaIdAndNumber(mangaId, tomeNumber);
+            userService.addTomeToLibrary(userId, tomeToAdd.getTomeId());
+            log.info("Tome {} ajouté à la bibliothèque de l'utilisateur {}", tomeToAdd.getTomeId(), userId);
+            return ResponseEntity.ok(tomeToAdd);
+        }
+        catch(UserNotFoundException | TomeNotFoundException | MangaNotFoundException e){
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors de l'ajout du tome n°{} du manga {} à la bibliothèque de l'utilisateur {}", tomeNumber, mangaId, userId);
             return ResponseEntity.badRequest().build();
         }
     }
