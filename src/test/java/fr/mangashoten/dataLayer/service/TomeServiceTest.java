@@ -77,42 +77,5 @@ class TomeServiceTest {
         assertEquals(genericTome.getTomeId(), foundTome.getTomeId());
     }
 
-    @Test
-    void add_tomeTest() {
-        // GIVEN
-        Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId(1);
-        tomeToSend.setTomeNumber(1);
-        tomeToSend.setTomeNumber(20);
-        tomeToSend.setCover("urlImage");
-        tomeToSend.setManga(new Manga("1"));
-//        tomeToSend.setUsers(new ArrayList<>());
 
-        // WHEN
-        Tome genericTome = tomeService.addTome(tomeToSend);
-
-        // THEN
-        assertEquals(tomeToSend.getTomeId(), genericTome.getTomeId());
-    }
-
-    @Test
-    void delete_tomeTest() {
-        // GIVEN
-        Tome tomeToSend = new Tome();
-        tomeToSend.setTomeId(1);
-        tomeToSend.setTomeNumber(1);
-        tomeToSend.setTomeNumber(20);
-        tomeToSend.setCover("urlImage");
-        tomeToSend.setManga(new Manga("1"));
-//        tomeToSend.setUsers(new ArrayList<>());
-
-        Tome genericTome = tomeRepository.save(tomeToSend);
-
-        // WHEN
-        tomeService.deleteTome(genericTome);
-
-        // THEN
-        assertEquals("1", genericTome.getTomeId());
-        assertEquals(Optional.empty(), tomeRepository.findById(1));
-    }
 }
