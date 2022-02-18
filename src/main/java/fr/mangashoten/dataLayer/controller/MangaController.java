@@ -25,8 +25,6 @@ public class MangaController {
 
     @Autowired
     private MangaService mangaService;
-    @Autowired
-    private TomeService tomeService;
 
     private static final Logger log = LoggerFactory.getLogger(MangaController.class);
 
@@ -48,9 +46,6 @@ public class MangaController {
     public List<MangaShort> getMangaByTitle(@PathVariable String manga_name) throws IOException {
         return mangaService.getMangaByNameFromApi(manga_name);
     }
-
-
-
 
     @DeleteMapping(value = "/delete/{manga_id}")
     public ResponseEntity<String> deleteMangaById(@PathVariable String manga_id) {

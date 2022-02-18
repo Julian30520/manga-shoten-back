@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value="/tome", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/tome", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TomeController {
 
     @Autowired
@@ -50,27 +50,5 @@ public class TomeController {
     }
 
 
-    /**
-     * Retire un tome de la bilibothèque de l'utilisateur
-     * @param user_id
-     * @param tome_id
-     * @return
-     */
-    @DeleteMapping(value="/{tome_id}/delete/{user_id}/")
-    public ResponseEntity removeTomeFromUserLibrary(@PathVariable int user_id, @PathVariable int tome_id){
-        try{
-            userService.deleteTomeFromUserLibrary(user_id, tome_id);
-            log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.ok().build();
-        }
-        catch(UserNotFoundException | TomeNotFoundException e){
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        catch(Exception e){
-            log.error("Erreur inconnue lors de l'ajout du tome {} à la bibliothèque de l'utilisateur {}", tome_id, user_id);
-            return ResponseEntity.badRequest().build();
-        }
-    }
 
 }

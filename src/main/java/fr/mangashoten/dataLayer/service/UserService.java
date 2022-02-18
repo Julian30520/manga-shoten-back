@@ -236,6 +236,25 @@ public class UserService {
     }
 
     /**
+     * Retire tous les tomes d'un manga de la bibliothèque d'un utilisateur
+     * @param mangaId
+     * @param userId
+     * @throws UserNotFoundException
+     * @throws MangaNotFoundException
+     * @throws JsonProcessingException
+     */
+    public void removeMangaFromLibrary(String mangaId, int userId) throws UserNotFoundException, MangaNotFoundException, JsonProcessingException {
+        User user = this.getUserById(userId);
+        Manga manga = mangaService.getMangaById(mangaId);
+        for(Tome tome : manga.getTomes()){
+            if(this.hasTome(user, tome)){
+                user.removeTome(tome);
+            }
+        }
+        userRepository.save(user);
+    }
+
+    /**
      * Détermine si le tome est deja présent dans la bibliothèque de l'utilisateur
      *
      * @param user

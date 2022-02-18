@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import fr.mangashoten.dataLayer.dto.Mapper;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 
@@ -227,6 +228,51 @@ public class UserController {
         }
         catch(Exception e){
             log.error("Erreur inconnue lors de l'ajout du tome n°{} du manga {} à la bibliothèque de l'utilisateur {}", tomeNumber, mangaId, userId);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    /**
+     * Retire un tome de la bilibothèque de l'utilisateur
+     * @param user_id
+     * @param tome_id
+     * @return
+     */
+    @DeleteMapping(value="/tome/remove/{user_id}/{tome_id}")
+    public ResponseEntity removeTomeFromUserLibrary(@PathVariable int user_id, @PathVariable int tome_id){
+        try{
+            userService.deleteTomeFromUserLibrary(user_id, tome_id);
+            log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.ok().build();
+        }
+        catch(UserNotFoundException | TomeNotFoundException e){
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors du retrait du tome {} de la bibliothèque de l'utilisateur {}", tome_id, user_id);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping(value="/manga/remove/{userId}/{mangaId}")
+    public ResponseEntity removeMangaFormUserLibrary(@PathVariable int userId, @PathVariable String mangaId){
+        try{
+            userService.removeMangaFromLibrary(mangaId, userId);
+            log.info("Manga {} retiré de la bibliothèque de l'utilisateur {}", mangaId, userId);
+            return ResponseEntity.ok().build();
+        }
+        catch(MangaNotFoundException | UserNotFoundException e){
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        catch(HttpClientErrorException e){
+            log.error("Problème de liaison avec MangeDex concernant le manga : {}", mangaId);
+            return ResponseEntity.badRequest().build();
+        }
+        catch(Exception e){
+            log.error("Erreur inconnue lors du retrait du manga {} de la bibliothèque de l'utilisateur {}", mangaId, userId);
             return ResponseEntity.badRequest().build();
         }
     }
