@@ -113,39 +113,6 @@ public class UserService {
     }
 
     /**
-     * Ajoute un tome dans la librairie d'un utilisateur
-     * Cette méthode n'ajoute que des tomes qui sont deja extraits.
-     * @param user_id
-     * @param tome_id
-     */
-    public void addTomeToLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
-        User user = this.getUserById(user_id);
-        Tome tome = tomeService.getTomeById(tome_id);
-        if (!this.hasTome(user, tome)) { //on n'ajoute le tome que s'il n'est pas déjà présent dans la bibliothèque
-            user.addTome(tome);
-            userRepository.save(user);
-        }
-    }
-
-    /**
-     * Retire un tome de la bibliothèque de l'utilisateur
-     *
-     * @param user_id
-     * @param tome_id
-     * @return
-     * @throws UserNotFoundException
-     */
-    public Tome deleteTomeFromUserLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
-        User user = this.getUserById(user_id);
-        Tome tome = tomeService.getTomeById(tome_id);
-        if(this.hasTome(user, tome)){
-            user.removeTome(tome);
-            userRepository.save(user);
-        }
-        return tome;
-    }
-
-    /**
      * Met à jour l'utilisateur dans la base de données
      *
      * @param user
@@ -214,7 +181,7 @@ public class UserService {
     }
 
     /**
-     * Ajoute la liste des tmes d'u nmanga à la librairie de l'utilisateur
+     * Ajoute la liste des tomes d'un manga à la librairie de l'utilisateur
      *
      * @param userId  L'id de l'utilisateur
      * @param mangaId L'id du manga
@@ -236,6 +203,22 @@ public class UserService {
     }
 
     /**
+     * Ajoute un tome dans la librairie d'un utilisateur
+     * Cette méthode n'ajoute que des tomes qui sont deja extraits.
+     * @param user_id
+     * @param tome_id
+     */
+    public void addTomeToLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
+        User user = this.getUserById(user_id);
+        Tome tome = tomeService.getTomeById(tome_id);
+        if (!this.hasTome(user, tome)) { //on n'ajoute le tome que s'il n'est pas déjà présent dans la bibliothèque
+            user.addTome(tome);
+            userRepository.save(user);
+        }
+    }
+
+
+    /**
      * Retire tous les tomes d'un manga de la bibliothèque d'un utilisateur
      * @param mangaId
      * @param userId
@@ -252,6 +235,25 @@ public class UserService {
             }
         }
         userRepository.save(user);
+    }
+
+
+    /**
+     * Retire un tome de la bibliothèque de l'utilisateur
+     *
+     * @param user_id
+     * @param tome_id
+     * @return
+     * @throws UserNotFoundException
+     */
+    public Tome removeTomeFromLibrary(Integer user_id, int tome_id) throws UserNotFoundException, TomeNotFoundException {
+        User user = this.getUserById(user_id);
+        Tome tome = tomeService.getTomeById(tome_id);
+        if(this.hasTome(user, tome)){
+            user.removeTome(tome);
+            userRepository.save(user);
+        }
+        return tome;
     }
 
     /**

@@ -29,6 +29,12 @@ public class TomeService {
         return arrayTomes;
     }
 
+    /**
+     * Obtient les information d'un tome dans la base de Manga-shoten (donc déjà extrait)
+     * @param tomeId
+     * @return
+     * @throws TomeNotFoundException
+     */
     public Tome getTomeById(int tomeId) throws TomeNotFoundException {
 
         var optTome = tomeRepository.findById(tomeId);
@@ -40,7 +46,8 @@ public class TomeService {
     }
 
     /**
-     * Récupère un tome spécifique du manga donné dans la base de données Manga-shoten
+     * Récupère un tome spécifique du manga donné. Si les données du manga en questions ne sont pas encore
+     * dans la base de manga-shoten, celles-ci sont automatiquement extraites)
      * @param mangaId L'id du manga dont on veut le tome spécifique
      * @param numero Le numéro du tome voulu dans le manga
      * @return
@@ -51,15 +58,6 @@ public class TomeService {
         Tome tome = tomeRepository.getByMangaAndTomeNumber(manga, numero);
         if(tome == null) throw new TomeNotFoundException();
         else return tome;
-    }
-
-
-    public Tome addTome(Tome tome) {
-        return tomeRepository.save(tome);
-    }
-
-    public void deleteTome(Tome tome) {
-        tomeRepository.delete(tome);
     }
 
 }

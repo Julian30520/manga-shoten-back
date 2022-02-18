@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value="/tome", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/tomes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TomeController {
 
     @Autowired
     private TomeService tomeService;
-    @Autowired
-    private UserService userService;
 
     private static final Logger log = LoggerFactory.getLogger(TomeController.class);
 

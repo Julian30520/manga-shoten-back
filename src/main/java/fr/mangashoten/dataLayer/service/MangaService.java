@@ -24,6 +24,10 @@ public class MangaService {
     @Autowired
     private MangaRepository mangaRepository;
 
+    /**
+     * Récupère la liste de tous les manga présents dans la base de donnée de Manga-shoten
+     * @return
+     */
     public ArrayList<Manga> getAllManga() {
         Iterable<Manga> mangas = mangaRepository.findAll();
         ArrayList<Manga> arrayListManga = new ArrayList<>();
@@ -32,6 +36,14 @@ public class MangaService {
         return arrayListManga;
     }
 
+    /**
+     * Récupère les informations d'un manga à partir de son id. Si le manga n'est pas présent dans la
+     * base de données de Manga-shoten, procède à l'extraction.
+     * @param mangaId
+     * @return Manga
+     * @throws MangaNotFoundException
+     * @throws JsonProcessingException
+     */
     public Manga getMangaById(String mangaId) throws MangaNotFoundException, JsonProcessingException {
         //Si le manga n'existe pas, on l'ajoute dans la base depuis MangaDex
         this.extract(mangaId);
@@ -41,25 +53,25 @@ public class MangaService {
         else throw new MangaNotFoundException(mangaId);
     }
 
-    public Manga addManga(Manga manga) {
-        if(!mangaRepository.existsByMangaId(manga.getMangaId()))
-            return  mangaRepository.save(manga);
-        else return manga;
-    }
 
-    public void deleteMangaById(String mangaId) {
-        mangaRepository.deleteById(mangaId);
-    }
-
-    public Manga findByTitleEn(String title) {
-        return mangaRepository.findByTitleEn(title).get();
-    }
-
+    /**
+     * Récupère une liste de mangas depuis MangaDex
+     * @param limit
+     * @param offset
+     * @return
+     * @throws IOException
+     */
     public List<MangaShort> getAllMangaFromApi(String limit,String offset) throws IOException {
         String url = "https://api.mangadex.org/manga?includes[]=cover_art&limit=" + limit + "&offset=" + offset ;
         return getMangaShorts(url);
     }
 
+    /**
+     * Récupère les infos d'un manga depuis MangaDex
+     * @param mangadexId
+     * @return
+     * @throws JsonProcessingException
+     */
     public Manga getMangaByIdFromApi(String mangadexId) throws JsonProcessingException {
         String url = "https://api.mangadex.org/manga?ids[]=" + mangadexId + "&includes[]=author&includes[]=artist&includes[]=cover_art";
         RestTemplate restTemplate = new RestTemplate();
@@ -168,6 +180,12 @@ public class MangaService {
         return getMangaShorts(url);
     }
 
+    /**
+     * Récupère une liste de manga depuis MangaDex
+     * @param url
+     * @return
+     * @throws JsonProcessingException
+     */
     private List<MangaShort> getMangaShorts(String url) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response
@@ -207,6 +225,11 @@ public class MangaService {
         return mangaList;
     }
 
+    /**
+     * Vérifie si un manga existe deja dans la base de données de Manga-shoten
+     * @param mangaId
+     * @return
+     */
     public Boolean exists(String mangaId){
         return mangaRepository.existsByMangaId(mangaId);
     }
@@ -221,5 +244,16 @@ public class MangaService {
             mangaToAdd.getTomes().forEach(tome->tome.setManga(mangaToAdd));
             this.addManga(mangaToAdd);
         }
+    }
+
+    /**
+     * Ajoute un manga dans la base de donnée de Manga-shoten
+     * @param manga
+     * @return
+     */
+    public Manga addManga(Manga manga) {
+        if(!mangaRepository.existsByMangaId(manga.getMangaId()))
+            return  mangaRepository.save(manga);
+        else return manga;
     }
 }

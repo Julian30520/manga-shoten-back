@@ -242,7 +242,7 @@ public class UserController {
     @DeleteMapping(value="/tome/remove/{user_id}/{tome_id}")
     public ResponseEntity removeTomeFromUserLibrary(@PathVariable int user_id, @PathVariable int tome_id){
         try{
-            userService.deleteTomeFromUserLibrary(user_id, tome_id);
+            userService.removeTomeFromLibrary(user_id, tome_id);
             log.info("Tome {} retiré de la bibliothèque de l'utilisateur {}", tome_id, user_id);
             return ResponseEntity.ok().build();
         }
