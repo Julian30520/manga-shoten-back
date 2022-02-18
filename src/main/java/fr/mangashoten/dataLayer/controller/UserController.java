@@ -149,12 +149,12 @@ public class UserController {
     /**
      * Methode pour enregistrer un nouvel utilisateur dans la BD.
      * @param user utiliateur.
-     * @return un JWT si la connection est OK sinon une mauvaise réponse
+     * @return un User si la connection est OK sinon une mauvaise réponse
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<JsonWebToken> signUp(@RequestBody User user) {
+    public ResponseEntity<UserDto> signUp(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(new JsonWebToken(userService.signup(user)));
+            return ResponseEntity.ok(this.mapper.toDto(userService.signup(user)));
         }
         catch (ExistingUsernameOrMailException ex) {
             log.warn(ex.getMessage());
