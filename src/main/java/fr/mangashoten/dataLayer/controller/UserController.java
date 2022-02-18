@@ -152,9 +152,9 @@ public class UserController {
      * @return un JWT si la connection est OK sinon une mauvaise réponse
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<JsonWebToken> signUp(@RequestBody User user) {
+    public ResponseEntity<UserDto> signUp(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(new JsonWebToken(userService.signup(user)));
+            return ResponseEntity.ok(mapper.toDto(userService.signup(user)));
         }
         catch (ExistingUsernameOrMailException ex) {
             log.warn(ex.getMessage());

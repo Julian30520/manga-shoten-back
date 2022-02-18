@@ -97,14 +97,14 @@ public class JwtTokenProvider {
 
      vérifier sur https://jwt.io
 
-     * @param username the user username.
+     * @param userId the user id.
      * @param roles the user roles.
      * @return the created JWT as String.
      * @throws JsonProcessingException
      */
-    public String createToken(String username, Role roles){
+    public String createToken(int userId, Role roles){
 
-        Claims claims = Jwts.claims().setSubject(username);
+        Claims claims = Jwts.claims().setSubject(String.format("%d", userId));
         //claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
         claims.put("auth", new SimpleGrantedAuthority(roles.getAuthority()) );
 
