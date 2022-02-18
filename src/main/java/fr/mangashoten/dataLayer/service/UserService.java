@@ -10,7 +10,6 @@ import fr.mangashoten.dataLayer.model.User;
 import fr.mangashoten.dataLayer.repository.UserRepository;
 import fr.mangashoten.dataLayer.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -165,18 +164,17 @@ public class UserService {
     public String signin(String username, String password) throws InvalidCredentialsException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            User user = userRepository.findByUsername(username).get();
-            return jwtTokenProvider.createToken(user.getUserId(), user.getRole());
+            return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).get().getRole());
         } catch (AuthenticationException e) {
             throw new InvalidCredentialsException();
         }
     }
 
-    public User signup(User user) throws ExistingUsernameOrMailException {
+    public String signup(User user) throws ExistingUsernameOrMailException {
         if (!userRepository.existsByUsername(user.getUsername()) && !userRepository.existsByMail(user.getMail())) {
             User userToSave = new User(user.getUsername(), user.getMail(), passwordEncoder.encode(user.getPassword()), user.getRole());
             userRepository.save(userToSave);
-            return userToSave;
+            return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
         } else {
             throw new ExistingUsernameOrMailException();
         }
