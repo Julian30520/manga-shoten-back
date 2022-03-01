@@ -1,5 +1,6 @@
 package fr.mangashoten.dataLayer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -53,7 +54,8 @@ public class Manga {
             orphanRemoval = true,
             mappedBy = "manga"
     )
-    @JsonManagedReference(value = "manga_tome")
+    //@JsonManagedReference(value = "manga_tome")
+    @JsonIgnoreProperties({"titleJp", "status","pubDemographic","lastVolume","lastChapter","synopsis","releaseDate","tomes","author", "mangaGenre"})
     private List<Tome> tomes = new ArrayList<>();
 
     @ManyToOne(

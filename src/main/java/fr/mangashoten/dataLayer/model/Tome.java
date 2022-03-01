@@ -1,6 +1,8 @@
 package fr.mangashoten.dataLayer.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +37,7 @@ public class Tome {
             }
     )
     @JoinColumn(name = "id_manga")
-    @JsonBackReference(value="manga_tome")
+    //@JsonBackReference(value="manga_tome")
+    @JsonIgnoreProperties({"titleJp", "status","pubDemographic","lastVolume","lastChapter","synopsis","releaseDate","tomes","author", "mangaGenre"})
     private Manga manga;
 }

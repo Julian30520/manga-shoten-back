@@ -27,6 +27,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.util.StringUtils;
 
 /**
  * JWT : classe utilitaire chargée de fournir le Jeton (Token) et les vérifications
@@ -162,8 +163,8 @@ public class JwtTokenProvider {
      */
     public String resolveToken(HttpServletRequest requeteHttp) {
         String bearerToken = requeteHttp.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
         }
         return null;
     }
@@ -177,7 +178,7 @@ public class JwtTokenProvider {
      */
     public boolean validateToken(String token) throws InvalidJWTException {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             throw new InvalidJWTException();

@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/sign-in").permitAll() // se connecter
                 .antMatchers("/users/sign-up").permitAll() // s'inscrire
                 .antMatchers("/manga/**").permitAll()
-                .antMatchers("/users/all").hasAuthority("ROLE_ADMIN") // que pour le rôle admin
+                .antMatchers("/users/**").hasAuthority("ROLE_USER")
+                .antMatchers("/users/all").hasAuthority("ROLE_ADMIN")// que pour le rôle admin
                 // on désactive le reste...
                 .anyRequest().authenticated();
         // Appliquer JWT
