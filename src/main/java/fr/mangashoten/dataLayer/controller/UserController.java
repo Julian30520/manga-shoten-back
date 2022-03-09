@@ -85,6 +85,18 @@ public class UserController {
         }
     }
 
+    /**
+     * récupere id des tomes dans la bibli
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/{userId}/bibli")
+    public ResponseEntity<Iterable<Integer>> getTomeById(@PathVariable int userId) {
+        Iterable<Integer> tome = userService.getIdTomeInBibli(userId);
+        System.out.println(tome);
+        return ResponseEntity.ok(tome);
+    }
+
     @GetMapping(value="/{user_id}/tomes")
     public ResponseEntity<ArrayList<Tome>> getUserTomes(@PathVariable Integer user_id) {
 
